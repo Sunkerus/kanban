@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Manager {
 
@@ -16,59 +17,15 @@ public class Manager {
 
     //методы для задач
 
-    public HashMap<Integer, Task> getAllTask(){
-        HashMap<Integer, Task> tempHash = new HashMap<>();
-        for (Integer iterator: storageTasks.keySet()) {
-            if (storageTasks.get(iterator).getClass().getSimpleName() == "Task"){
-               tempHash.put(iterator, storageTasks.get(iterator));
-            }
-            return tempHash;
-        }
+    public HashMap<Integer, Task> getAllTask(){ //получение задач
+
+        return storageTasks;
 
     }
 
 
-    public void createTask(String name, String description) { // fin
-
-        storageTasks.put(generateHash(), new Task(name, description));
-
-    }
-
-    public void
-
-
-    public void addEpic(String name, String description, Subtask subtasks) { //fin
-
-        storageTasks.put(generateHash(), new Epic(name, description, subtasks));
-
-    }
-
-    /*public Task addSubtask(int id, String name, String description) { //fin
-
-        if (storageTasks.containsKey(id)) { //выполнить проверку на epic
-
-            storageTasks.get(id).setSubtask(name, description);
-
-        } else {
-
-            System.out.println("no epic task with this id");
-
-        } */
-
-        public void changeStatus(int id, int statusId){
-
-            if (storageTasks.containsKey(id)) { //выполнить проверку на epic
-                storageTasks.get(id).setStatus(statusId);
-            } else {
-                System.out.println("task with this id not found");
-
-            }
-    }
-
-    public void deleteAllTask() {
-
-        storageTasks.clear();
-
+    public void removeAllTask(){ //удаление задач
+          storageTasks.clear();
     }
 
     public Task getTaskById(int id) {
@@ -77,33 +34,30 @@ public class Manager {
 
     }
 
-    public Task getEpicSubtask(int id) {
+    public void createTask(Task task) { // создание задачи
 
-        return storageTasks.get(id).getSubtasks();
-
-    }
-
-//updateTask
-
-    public void updateTask(int id, Task newTask) {
-
-        if (storageTasks.containsKey(id))
-
-            storageTasks.put(id, newTask);
+        storageTasks.put(generateHash(), task);
 
     }
+    public void updateTask(int id, Task task){
+        storageTasks.put(id,task);
+    }
 
-    public void deleteTask(int id) {
-
+    public void deleteTaskById(int id){
         storageTasks.remove(id);
-
-        System.out.println("Task delete succsessful");
-
-//for epic need add status and update ststus block upper in codw
-
     }
 
-    public void setSubtask() {
+    //additional methods
 
+    public ArrayList<Subtask> getListSubtaskOfEpic(Epic epic){
+        ArrayList<Subtask> tempArrSubtask = new ArrayList<>();
+        for (Integer iterator: storageTasks.keySet()) {
+            if (storageTasks.get(iterator).equals(epic)) {
+                Epic someEpic = (Epic) storageTasks.get(iterator);
+                tempArrSubtask = someEpic.getSubtasks();
+            }
+        }
+        return tempArrSubtask;
     }
+
 }

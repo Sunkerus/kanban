@@ -1,7 +1,7 @@
 public class Task {
-    private String name;
-    private String description;
-    private String statusTask;
+    protected String name;
+    protected String description;
+    protected String statusTask;
 
     private String[] statusTaskStorage = new String[] {"NEW", "IN_PROGRESS", "DONE"};
 

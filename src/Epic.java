@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Epic extends Task{
 
@@ -25,10 +26,14 @@ public class Epic extends Task{
     }
 
     @Override
-    public String toString () {
-
-        return "qwe";
-
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // проверяем адреса объектов
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        Epic otherEpic = (Epic) obj;
+        return Objects.equals(name, otherEpic.name) && // проверяем все поля
+                Objects.equals(description, otherEpic.description) && // нужно логическое «и»
+                Objects.equals(subtasks, otherEpic.subtasks);
     }
 
 }
