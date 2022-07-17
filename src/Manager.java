@@ -47,6 +47,31 @@ public class Manager {
         storageTasks.remove(id);
     }
 
+    public void updateEpic(int id, Epic epic) {
+        //updateEpicStatus
+        boolean checkStatusNEW = true;
+        boolean checkStatusDONE = true;
+        if (!epic.getSubtasks().isEmpty()){
+        for (Subtask iterator: epic.getSubtasks()){
+            if (iterator.getStatus() != "NEW"){
+                checkStatusNEW = false;
+            }
+            if (iterator.getStatus() != "DONE"){
+                checkStatusDONE = false;
+            }
+            }
+        if(checkStatusNEW){
+            epic.setStatus(0);
+        }else if (checkStatusDONE){
+            epic.setStatus(2);
+        }else {
+            epic.setStatus(1);
+        }
+        }
+        storageTasks.put(id, epic);
+
+    }
+
     //additional methods
 
     public ArrayList<Subtask> getListSubtaskOfEpic(Epic epic){
