@@ -19,6 +19,12 @@ public class Epic extends Task{
 
     }
 
+    public void setSubtask(Subtask subtask) {
+
+        subtasks.add(subtask);
+
+    }
+
     public ArrayList<Subtask> getSubtasks() {
 
         return subtasks;
@@ -35,5 +41,4 @@ public class Epic extends Task{
                 Objects.equals(description, otherEpic.description) && // нужно логическое «и»
                 Objects.equals(subtasks, otherEpic.subtasks);
     }
-
 }

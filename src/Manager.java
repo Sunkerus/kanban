@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Manager {
 
@@ -53,10 +54,10 @@ public class Manager {
         boolean checkStatusDONE = true;
         if (!epic.getSubtasks().isEmpty()){
         for (Subtask iterator: epic.getSubtasks()){
-            if (iterator.getStatus() != "NEW"){
+            if (!Objects.equals(iterator.getStatus(), "NEW")){
                 checkStatusNEW = false;
             }
-            if (iterator.getStatus() != "DONE"){
+            if (!Objects.equals(iterator.getStatus(), "DONE")){
                 checkStatusDONE = false;
             }
             }
@@ -71,6 +72,33 @@ public class Manager {
         storageTasks.put(id, epic);
 
     }
+
+
+    public void addSubtask(int id ,Subtask subtask){
+        Epic someEpic = (Epic) storageTasks.get(id);
+        someEpic.setSubtask(subtask);
+        //updateEpicStatus
+        boolean checkStatusNEW = true;
+        boolean checkStatusDONE = true;
+        if (!someEpic.getSubtasks().isEmpty()){
+            for (Subtask iterator: someEpic.getSubtasks()){
+                if (!Objects.equals(iterator.getStatus(), "NEW")){
+                    checkStatusNEW = false;
+                }
+                if (!Objects.equals(iterator.getStatus(), "DONE")){
+                    checkStatusDONE = false;
+                }
+            }
+            if(checkStatusNEW){
+                someEpic.setStatus(0);
+            }else if (checkStatusDONE){
+                someEpic.setStatus(2);
+            }else {
+                someEpic.setStatus(1);
+            }
+        }
+    }
+
 
     //additional methods
 
