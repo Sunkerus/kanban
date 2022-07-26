@@ -4,20 +4,22 @@ public class Task {
     protected String statusTask;
     protected Integer id;
 
-    private String[] statusTaskStorage = new String[] {"NEW", "IN_PROGRESS", "DONE"};
+    private String[] statusTaskStorage = new String[]{"NEW", "IN_PROGRESS", "DONE"};
 
-    Task(String name, String description){
+    Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.statusTask = statusTaskStorage[0]; // statusTask = NEW;
 
     }
 
-    public void setStatus (int taskStatusId){
+    public void setStatus(int taskStatusId) {
         statusTask = statusTaskStorage[taskStatusId];
     }
 
-    public String getStatus() { return statusTask; }
+    public String getStatus() {
+        return statusTask;
+    }
 
 
     public void setName(String name) {
@@ -37,14 +39,13 @@ public class Task {
     }
 
 
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
-    public Integer getId(){
+
+    public Integer getId() {
         return id;
     }
-
-
 
 
 }

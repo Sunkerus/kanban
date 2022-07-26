@@ -20,12 +20,12 @@ public class Manager {
 
     //методы для задач
 
-    public ArrayList<Task> getAllTask(){ //получение списка задач
+    public ArrayList<Task> getAllTask() { //получение списка задач
         return (ArrayList<Task>) storageTask.values();
     }
 
 
-    public void removeAllTask(){ //удаление всех задач
+    public void removeAllTask() { //удаление всех задач
         storageTask.clear();
     }
 
@@ -40,26 +40,26 @@ public class Manager {
         storageTask.put(generateId(), task);
 
 
-
     }
-    public void updateTask(Task task){ // обновление задачи
+
+    public void updateTask(Task task) { // обновление задачи
 
         storageTask.put(task.getId(), task);
     }
 
-    public void deleteTaskById(int id){
+    public void deleteTaskById(int id) {
         storageTask.remove(id);
     }
 
 
     //методы для эпиков
 
-    public ArrayList<Epic> getAllEpic(){ //получение списка эпиков
+    public ArrayList<Epic> getAllEpic() { //получение списка эпиков
         return (ArrayList<Epic>) storageEpic.values();
     }
 
 
-    public void removeAllEpic(){ //удаление всех эпиков
+    public void removeAllEpic() { //удаление всех эпиков
         storageEpic.clear();
     }
 
@@ -74,14 +74,15 @@ public class Manager {
         storageEpic.put(generateId(), epic);
 
     }
-    public void updateEpic(Epic epic){ // обновление эпика
+
+    public void updateEpic(Epic epic) { // обновление эпика
         storageTask.put(epic.getId(), epic);
     }
 
-    public void deleteEpicById(int id){
+    public void deleteEpicById(int id) {
         ArrayList<Integer> tempSubtaskIdArr = storageEpic.get(id).getSubtasksId();
 
-        for (Integer iterator:tempSubtaskIdArr) {
+        for (Integer iterator : tempSubtaskIdArr) {
             deleteSubtaskById(iterator);
         }
         storageEpic.remove(id);
@@ -90,13 +91,13 @@ public class Manager {
 
     //методя для подзадач
 
-    public ArrayList<Subtask> getAllSubtask(){ //получение списка подзадач
+    public ArrayList<Subtask> getAllSubtask() { //получение списка подзадач
         return (ArrayList<Subtask>) storageSubtask.values();
     }
 
 
-    public void removeAllSubtask(){ //удаление всех субтасков
-        for (Epic iterator: storageEpic.values()){ //обновление статусов всех эпиков
+    public void removeAllSubtask() { //удаление всех субтасков
+        for (Epic iterator : storageEpic.values()) { //обновление статусов всех эпиков
             iterator.setStatus(0);
         }
         storageSubtask.clear();
@@ -117,14 +118,15 @@ public class Manager {
 
 
     }
-    public void updateSubtask(Subtask subtask){ // обновление подзадачи
+
+    public void updateSubtask(Subtask subtask) { // обновление подзадачи
 
         storageSubtask.put(subtask.getId(), subtask);
         updateEpicStatus(subtask.getEpicId(), storageEpic.get(subtask.getEpicId())); //обновление статуса эпика
 
     }
 
-    public void deleteSubtaskById(Integer id){
+    public void deleteSubtaskById(Integer id) {
 
         Integer epicId = storageSubtask.get(id).getEpicId();
 
@@ -136,16 +138,13 @@ public class Manager {
 
 //additional methods
 
-    public ArrayList<Subtask> getListSubtaskOfEpic(Integer id){
+    public ArrayList<Subtask> getListSubtaskOfEpic(Integer id) {
         ArrayList<Subtask> tempArrSubtask = new ArrayList<>();
-        for (Integer iterator: storageEpic.get(id).getSubtasksId()) {
+        for (Integer iterator : storageEpic.get(id).getSubtasksId()) {
             tempArrSubtask.add(storageSubtask.get(iterator));
         }
         return tempArrSubtask;
     }
-
-
-
 
 
     public void updateEpicStatus(int id, Epic epic) {
@@ -171,9 +170,6 @@ public class Manager {
         }
 
     }
-
-
-
 
 
 }

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Epic extends Task{
+public class Epic extends Task {
 
     private ArrayList<Integer> subtasksId = new ArrayList<>();
 
@@ -11,20 +11,20 @@ public class Epic extends Task{
 
     }
 
-   public void addId(Integer id) {
+    public void addId(Integer id) {
         subtasksId.add(id);
-   }
+    }
 
     public void deleteId(Integer valueId) {
         subtasksId.remove(subtasksId.indexOf(valueId));
     }
 
 
-    public void setSubtasksId(Integer id){
+    public void setSubtasksId(Integer id) {
         subtasksId.add(id);
     }
 
-    public ArrayList<Integer> getSubtasksId(){
+    public ArrayList<Integer> getSubtasksId() {
         return subtasksId;
     }
 }
