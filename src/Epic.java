@@ -15,15 +15,14 @@ public class Epic extends Task{
         subtasksId.add(id);
    }
 
-    public void deleteId(Integer id) {
-        subtasksId.remove(id); //реализовать функцию поиска id
+    public void deleteId(Integer valueId) {
+        subtasksId.remove(subtasksId.indexOf(valueId));
     }
 
 
     public void setSubtasksId(Integer id){
         subtasksId.add(id);
     }
-
 
     public ArrayList<Integer> getSubtasksId(){
         return subtasksId;
