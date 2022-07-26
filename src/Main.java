@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println("Создаём один эпик с подзадачей");
-        Epic newEpic1 = new Epic("name", "description", new Subtask ("подзадача", "description" ));
+        Epic newEpic1 = new Epic("name", "description");
 
     }
 

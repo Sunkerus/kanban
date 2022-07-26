@@ -3,33 +3,34 @@ import java.util.Objects;
 
 public class Epic extends Task{
 
-    ArrayList<Subtask> subtasks = new ArrayList<>();
+    private ArrayList<Integer> subtasksId = new ArrayList<>();
 
-    Epic(String name, String description, Subtask subtasks) {
+    Epic(String name, String description) {
 
         super(name, description);
 
-        this.subtasks.add(subtasks);
-
     }
 
-    public void setSubtask(String name, String description) {
+   public void addId(Integer id) {
+        subtasksId.add(id);
+   }
 
-        subtasks.add(new Subtask(name,description));
-
+    public void deleteId(Integer id) {
+        subtasksId.remove(id); //реализовать функцию поиска id
     }
 
-    public void setSubtask(Subtask subtask) {
 
-        subtasks.add(subtask);
-
+    public void setSubtasksId(Integer id){
+        subtasksId.add(id);
     }
 
-    public ArrayList<Subtask> getSubtasks() {
 
-        return subtasks;
-
+    public ArrayList<Integer> getSubtasksId(){
+        return subtasksId;
     }
+
+
+
 
     @Override
     public boolean equals(Object obj) {
@@ -39,6 +40,6 @@ public class Epic extends Task{
         Epic otherEpic = (Epic) obj;
         return Objects.equals(name, otherEpic.name) && // проверяем все поля
                 Objects.equals(description, otherEpic.description) && // нужно логическое «и»
-                Objects.equals(subtasks, otherEpic.subtasks);
+                Objects.equals(subtasksId, otherEpic.subtasksId);
     }
 }

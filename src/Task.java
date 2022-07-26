@@ -2,6 +2,7 @@ public class Task {
     protected String name;
     protected String description;
     protected String statusTask;
+    protected Integer id;
 
     private String[] statusTaskStorage = new String[] {"NEW", "IN_PROGRESS", "DONE"};
 
@@ -33,6 +34,14 @@ public class Task {
 
     public String getDescription() {
         return description;
+    }
+
+
+    public void setId(int id){
+        this.id = id;
+    }
+    public Integer getId(){
+        return id;
     }
 
 
