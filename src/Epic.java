@@ -28,18 +28,4 @@ public class Epic extends Task{
     public ArrayList<Integer> getSubtasksId(){
         return subtasksId;
     }
-
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true; // проверяем адреса объектов
-        if (obj == null) return false;
-        if (this.getClass() != obj.getClass()) return false;
-        Epic otherEpic = (Epic) obj;
-        return Objects.equals(name, otherEpic.name) && // проверяем все поля
-                Objects.equals(description, otherEpic.description) && // нужно логическое «и»
-                Objects.equals(subtasksId, otherEpic.subtasksId);
-    }
 }
