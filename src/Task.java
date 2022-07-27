@@ -10,7 +10,6 @@ public class Task {
         this.name = name;
         this.description = description;
         this.statusTask = statusTaskStorage[0]; // statusTask = NEW;
-
     }
 
     public void setStatus(int taskStatusId) {

@@ -13,7 +13,6 @@ public class Manager {
         generateId += 1;
 
         return generateId;
-
     }
 
     //методы для задач
@@ -33,15 +32,12 @@ public class Manager {
     public Task getTaskById(int id) { //получение по id
 
         return storageTask.get(id);
-
     }
 
     public void createTask(Task task) { // создание задачи(объект передаётся в качестве параметра)
 
         storageTask.put(generateId(), task);
         task.setId(generateId);
-
-
     }
 
     public void updateTask(Task task) { // обновление задачи
@@ -67,20 +63,17 @@ public class Manager {
     public void removeAllEpic() { //удаление всех эпиков
         storageEpic.clear();
         storageSubtask.clear();         //удаляем все сабтаски
-
     }
 
     public Epic getEpicById(int id) { //получение по id
 
         return storageEpic.get(id);
-
     }
 
     public void createEpic(Epic epic) { // создание эпика(объект передаётся в качестве параметра)
 
         storageEpic.put(generateId(), epic);
         epic.setId(generateId);
-
     }
 
     public void updateEpic(Epic epic) { // обновление эпика
@@ -119,7 +112,6 @@ public class Manager {
     public Subtask getSubtaskById(int id) { //получение по id субтасков
 
         return storageSubtask.get(id);
-
     }
 
     public void createSubtask(Subtask subtask) { // создание сабтаска(объект передаётся в качестве параметра)
@@ -128,15 +120,12 @@ public class Manager {
         subtask.setId(generateId); //присвоение id
         storageEpic.get(subtask.getEpicId()).addId(subtask.getId()); //добавление идентификатора в список подзадач эпика
         updateEpicStatus(storageEpic.get(subtask.getEpicId()));   //обновление статуса эпика
-
-
     }
 
     public void updateSubtask(Subtask subtask) { // обновление подзадачи
 
         storageSubtask.put(subtask.getId(), subtask);
         updateEpicStatus(storageEpic.get(subtask.getEpicId())); //обновление статуса эпика
-
     }
 
     public void deleteSubtaskById(Integer id) {
@@ -181,8 +170,5 @@ public class Manager {
         } else {
             epic.setStatus(1);
         }
-
     }
-
-
 }
