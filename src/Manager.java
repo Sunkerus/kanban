@@ -11,7 +11,6 @@ public class Manager {
     public int generateId() {
 
         generateId += 1;
-
         return generateId;
     }
 
