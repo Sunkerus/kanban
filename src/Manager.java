@@ -4,9 +4,9 @@ public class Manager {
 
     private int generateId = 0;
 
-    HashMap<Integer, Task> storageTask = new HashMap<>();
-    HashMap<Integer, Epic> storageEpic = new HashMap<>();
-    HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
+    private HashMap<Integer, Task> storageTask = new HashMap<>();
+    private HashMap<Integer, Epic> storageEpic = new HashMap<>();
+    private HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
 
     public int generateId() {
 
@@ -66,6 +66,7 @@ public class Manager {
 
     public void removeAllEpic() { //удаление всех эпиков
         storageEpic.clear();
+        storageSubtask.clear();         //удаляем все сабтаски
 
     }
 
@@ -88,7 +89,7 @@ public class Manager {
 
     public void deleteEpicById(int id) {
         //копируем массив
-        ArrayList<Integer> tempSubtaskIdArr = (ArrayList<Integer>) storageEpic.get(id).getSubtasksId().clone();
+        ArrayList<Integer> tempSubtaskIdArr = new ArrayList<>(storageEpic.get(id).getSubtasksId());
 
         for (Integer iterator : tempSubtaskIdArr) {
             deleteSubtaskById(iterator);
@@ -110,6 +111,7 @@ public class Manager {
     public void removeAllSubtask() { //удаление всех субтасков
         for (Epic iterator : storageEpic.values()) { //обновление статусов всех эпиков
             iterator.setStatus(0);
+            iterator.clearAllId();                   //очистка коллекции идентификаторов в каждом эпике
         }
         storageSubtask.clear();
     }
@@ -125,7 +127,7 @@ public class Manager {
         storageSubtask.put(generateId(), subtask);      //добавление подзадачи в MAP для подзадач  в эпике
         subtask.setId(generateId); //присвоение id
         storageEpic.get(subtask.getEpicId()).addId(subtask.getId()); //добавление идентификатора в список подзадач эпика
-        updateEpicStatus(subtask.getEpicId(), storageEpic.get(subtask.getEpicId()));   //обновление статуса эпика
+        updateEpicStatus(storageEpic.get(subtask.getEpicId()));   //обновление статуса эпика
 
 
 
@@ -134,7 +136,7 @@ public class Manager {
     public void updateSubtask(Subtask subtask) { // обновление подзадачи
 
         storageSubtask.put(subtask.getId(), subtask);
-        updateEpicStatus(subtask.getEpicId(), storageEpic.get(subtask.getEpicId())); //обновление статуса эпика
+        updateEpicStatus(storageEpic.get(subtask.getEpicId())); //обновление статуса эпика
 
     }
 
@@ -144,7 +146,7 @@ public class Manager {
 
         storageEpic.get(epicId).deleteId(id);
         storageSubtask.remove(id);
-        updateEpicStatus(epicId, storageEpic.get(epicId));
+        updateEpicStatus(storageEpic.get(epicId));
     }
 
 
@@ -159,7 +161,7 @@ public class Manager {
     }
 
 
-    protected void updateEpicStatus(int id, Epic epic) {
+    protected void updateEpicStatus(Epic epic) {
         //updateEpicStatus
         boolean checkStatusNEW = true;
         boolean checkStatusDONE = true;

@@ -55,6 +55,11 @@ public class Main {
         System.out.println(manager.getListSubtaskOfEpic(1));
 
 
+        System.out.println("\nУдалим все сабтаски\n");
+        System.out.println("________________________________________________\n");
+        manager.removeAllSubtask();
+        System.out.println(manager.getAllEpic());
+        System.out.println(manager.getAllSubtask());
 
     }
 

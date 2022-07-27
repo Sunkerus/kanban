@@ -15,7 +15,7 @@ public class Epic extends Task {
     }
 
     public void deleteId(Integer valueId) {
-        subtasksId.remove(subtasksId.indexOf(valueId));
+        subtasksId.remove(valueId);
     }
 
 
@@ -26,6 +26,10 @@ public class Epic extends Task {
     public ArrayList<Integer> getSubtasksId() {
 
         return subtasksId;
+    }
+
+    public void clearAllId(){
+        subtasksId.clear();
     }
 
     @Override
