@@ -18,7 +18,7 @@ public class Manager {
 
     //методы для задач
 
-    public ArrayList<Task>  getAllTask() { //получение списка задач
+    public ArrayList<Task> getAllTask() { //получение списка задач
 
         Collection<Task> values = storageTask.values();
         ArrayList<Task> listOfValues = new ArrayList<>(values);
@@ -128,7 +128,6 @@ public class Manager {
         subtask.setId(generateId); //присвоение id
         storageEpic.get(subtask.getEpicId()).addId(subtask.getId()); //добавление идентификатора в список подзадач эпика
         updateEpicStatus(storageEpic.get(subtask.getEpicId()));   //обновление статуса эпика
-
 
 
     }

@@ -6,8 +6,8 @@ public class Main {
 
         System.out.println("Создаём один эпик с 2 подзадачами\n");
         Epic newEpic1 = new Epic("name", "description");
-        Subtask newSubtask1_1 = new Subtask("name","descritpion");
-        Subtask newSubtask1_2 = new Subtask("name","descritpion");
+        Subtask newSubtask1_1 = new Subtask("name", "description");
+        Subtask newSubtask1_2 = new Subtask("name", "description");
 
         manager.createEpic(newEpic1);
         newSubtask1_1.setEpicId(newEpic1.getId()); // привязываем сабтаск к epic
@@ -18,7 +18,7 @@ public class Main {
 
         System.out.println("Создаём один эпик с 1 подзадачей\n");
         Epic newEpic2 = new Epic("name", "description");
-        Subtask newSubtask2_1 = new Subtask("name","descritpion");
+        Subtask newSubtask2_1 = new Subtask("name", "description");
 
         manager.createEpic(newEpic2);
         newSubtask2_1.setEpicId(newEpic2.getId()); // привязываем сабтаск к epic

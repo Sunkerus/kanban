@@ -51,7 +51,7 @@ public class Task {
     public String toString() {
 
         return "Type: Task, " +
-                "Id = " + id  + ", " +
+                "Id = " + id + ", " +
                 "name = " + name + ", " +
                 "description = " + description + ", " +
                 "statusTask = " + statusTask;

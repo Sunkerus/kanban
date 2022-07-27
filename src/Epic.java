@@ -28,7 +28,7 @@ public class Epic extends Task {
         return subtasksId;
     }
 
-    public void clearAllId(){
+    public void clearAllId() {
         subtasksId.clear();
     }
 
@@ -36,14 +36,12 @@ public class Epic extends Task {
     public String toString() {
 
         return "Type: Epic, " +
-                        "Id = " + id  + ", " +
-                        "name = " + name + ", " +
-                        "description = " + description + ", " +
-                        "statusTask = " + statusTask + ", " +
-                        "subtaskInto = " + subtasksId;
+                "Id = " + id + ", " +
+                "name = " + name + ", " +
+                "description = " + description + ", " +
+                "statusTask = " + statusTask + ", " +
+                "subtaskInto = " + subtasksId;
     }
-
-
 
 
 }
