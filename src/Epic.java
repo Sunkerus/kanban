@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Epic extends Task {
 
@@ -27,4 +26,6 @@ public class Epic extends Task {
     public ArrayList<Integer> getSubtasksId() {
         return subtasksId;
     }
+
+
 }

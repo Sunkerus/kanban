@@ -20,8 +20,8 @@ public class Manager {
 
     //методы для задач
 
-    public ArrayList<Task> getAllTask() { //получение списка задач
-        return (ArrayList<Task>) storageTask.values();
+    public HashMap<Integer,Task> getAllTask() { //получение списка задач
+        return storageTask;
     }
 
 
@@ -38,6 +38,7 @@ public class Manager {
     public void createTask(Task task) { // создание задачи(объект передаётся в качестве параметра)
 
         storageTask.put(generateId(), task);
+        task.setId(generateId);
 
 
     }
@@ -54,8 +55,8 @@ public class Manager {
 
     //методы для эпиков
 
-    public ArrayList<Epic> getAllEpic() { //получение списка эпиков
-        return (ArrayList<Epic>) storageEpic.values();
+    public HashMap<Integer,Epic> getAllEpic() { //получение списка эпиков
+        return storageEpic;
     }
 
 
@@ -72,6 +73,7 @@ public class Manager {
     public void createEpic(Epic epic) { // создание эпика(объект передаётся в качестве параметра)
 
         storageEpic.put(generateId(), epic);
+        epic.setId(generateId);
 
     }
 
@@ -91,8 +93,8 @@ public class Manager {
 
     //методя для подзадач
 
-    public ArrayList<Subtask> getAllSubtask() { //получение списка подзадач
-        return (ArrayList<Subtask>) storageSubtask.values();
+    public HashMap<Integer,Subtask> getAllSubtask() { //получение списка подзадач
+        return storageSubtask;
     }
 
 
@@ -110,11 +112,13 @@ public class Manager {
 
     }
 
-    public void createSubtask(Subtask subtask) { // создание эпика(объект передаётся в качестве параметра)
+    public void createSubtask(Subtask subtask) { // создание сабтаска(объект передаётся в качестве параметра)
 
-        storageEpic.get(subtask.getEpicId()).addId(subtask.getId()); //добавление идентификатора в список подзадач эпика
         storageSubtask.put(generateId(), subtask);      //добавление подзадачи в MAP для подзадач  в эпике
+        subtask.setId(generateId); //присвоение id
+        storageEpic.get(subtask.getEpicId()).addId(subtask.getId()); //добавление идентификатора в список подзадач эпика
         updateEpicStatus(subtask.getEpicId(), storageEpic.get(subtask.getEpicId()));   //обновление статуса эпика
+
 
 
     }
