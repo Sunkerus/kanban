@@ -4,7 +4,7 @@ public class Main {
 
         Manager manager = new Manager();
 
-        System.out.println("Создаём один эпик с 2 подзадачaами\n");
+        System.out.println("Создаём один эпик с 2 подзадачами\n");
         Epic newEpic1 = new Epic("name", "description");
         Subtask newSubtask1_1 = new Subtask("name","descritpion");
         Subtask newSubtask1_2 = new Subtask("name","descritpion");
