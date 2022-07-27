@@ -47,5 +47,15 @@ public class Task {
         return id;
     }
 
+    @Override
+    public String toString() {
+
+        return "Type: Task, " +
+                "Id = " + id  + ", " +
+                "name = " + name + ", " +
+                "description = " + description + ", " +
+                "statusTask = " + statusTask;
+    }
+
 
 }

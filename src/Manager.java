@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 public class Manager {
 
@@ -20,8 +18,11 @@ public class Manager {
 
     //методы для задач
 
-    public HashMap<Integer,Task> getAllTask() { //получение списка задач
-        return storageTask;
+    public ArrayList<Task>  getAllTask() { //получение списка задач
+
+        Collection<Task> values = storageTask.values();
+        ArrayList<Task> listOfValues = new ArrayList<>(values);
+        return listOfValues;
     }
 
 
@@ -55,13 +56,17 @@ public class Manager {
 
     //методы для эпиков
 
-    public HashMap<Integer,Epic> getAllEpic() { //получение списка эпиков
-        return storageEpic;
+    public ArrayList<Epic> getAllEpic() { //получение списка эпиков
+
+        Collection<Epic> values = storageEpic.values();
+        ArrayList<Epic> listOfValues = new ArrayList<>(values);
+        return listOfValues;
     }
 
 
     public void removeAllEpic() { //удаление всех эпиков
         storageEpic.clear();
+
     }
 
     public Epic getEpicById(int id) { //получение по id
@@ -82,7 +87,8 @@ public class Manager {
     }
 
     public void deleteEpicById(int id) {
-        ArrayList<Integer> tempSubtaskIdArr = storageEpic.get(id).getSubtasksId();
+        //копируем массив
+        ArrayList<Integer> tempSubtaskIdArr = (ArrayList<Integer>) storageEpic.get(id).getSubtasksId().clone();
 
         for (Integer iterator : tempSubtaskIdArr) {
             deleteSubtaskById(iterator);
@@ -93,8 +99,11 @@ public class Manager {
 
     //методя для подзадач
 
-    public HashMap<Integer,Subtask> getAllSubtask() { //получение списка подзадач
-        return storageSubtask;
+    public ArrayList<Subtask> getAllSubtask() { //получение списка подзадач
+
+        Collection<Subtask> values = storageSubtask.values();
+        ArrayList<Subtask> listOfValues = new ArrayList<>(values);
+        return listOfValues;
     }
 
 
@@ -106,7 +115,6 @@ public class Manager {
     }
 
     public Subtask getSubtaskById(int id) { //получение по id субтасков
-
 
         return storageSubtask.get(id);
 
@@ -151,7 +159,7 @@ public class Manager {
     }
 
 
-    public void updateEpicStatus(int id, Epic epic) {
+    protected void updateEpicStatus(int id, Epic epic) {
         //updateEpicStatus
         boolean checkStatusNEW = true;
         boolean checkStatusDONE = true;
@@ -164,13 +172,13 @@ public class Manager {
                     checkStatusDONE = false;
                 }
             }
-            if (checkStatusNEW) {
-                epic.setStatus(0);
-            } else if (checkStatusDONE) {
-                epic.setStatus(2);
-            } else {
-                epic.setStatus(1);
-            }
+        }
+        if (checkStatusNEW) {
+            epic.setStatus(0);
+        } else if (checkStatusDONE) {
+            epic.setStatus(2);
+        } else {
+            epic.setStatus(1);
         }
 
     }

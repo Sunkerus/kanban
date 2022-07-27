@@ -18,4 +18,15 @@ public class Subtask extends Task{
         return epicId;
     }
 
+    @Override
+    public String toString() {
+
+        return "Type: Subtask, " +
+                "Id = " + id  + ", " +
+                "name = " + name + ", " +
+                "description = " + description + ", " +
+                "statusTask = " + statusTask;
+    }
+
+
 }
