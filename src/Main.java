@@ -3,6 +3,7 @@ public class Main {
     public static void main(String[] args) {
 
         InMemoryTaskManager manager = new InMemoryTaskManager();
+        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
         System.out.println("Создаём один эпик с 2 подзадачами\n");
         Epic newEpic1 = new Epic("name", "description");
@@ -81,7 +82,7 @@ public class Main {
 
         System.out.println("\nПолучим историю просмотров\n");
         System.out.println("________________________________________________\n");
-        System.out.println(manager.getHistory());
+        System.out.println(historyManager.getHistory());
 
     }
 

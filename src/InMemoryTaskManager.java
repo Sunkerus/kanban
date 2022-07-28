@@ -7,7 +7,10 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> storageTask = new HashMap<>();
     private HashMap<Integer, Epic> storageEpic = new HashMap<>();
     private HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
-    private List<Task> historyList = new ArrayList<>();
+
+    private InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+
+
 
     @Override
     public int generateId() {
@@ -34,8 +37,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) { //получение по id
 
-        historyList.add(0, storageTask.get(id));
-        historyCheckOverflow();
+        historyManager.add(storageTask.get(id));
         return storageTask.get(id);
     }
 
@@ -77,8 +79,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(int id) { //получение по id
 
-        historyList.add(0, storageEpic.get(id));
-        historyCheckOverflow();
+        historyManager.add(storageEpic.get(id));
         return storageEpic.get(id);
     }
 
@@ -129,8 +130,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(int id) { //получение по id субтасков
 
-        historyList.add(0, storageSubtask.get(id));
-        historyCheckOverflow();
+        historyManager.add(storageSubtask.get(id));
         return storageSubtask.get(id);
     }
 
@@ -172,18 +172,6 @@ public class InMemoryTaskManager implements TaskManager {
         return tempArrSubtask;
     }
 
-    @Override
-    public List<Task> getHistory(){
-        return historyList;
-    }
-
-
-    private void historyCheckOverflow(){
-
-        if (historyList.size() > 10) {
-            historyList.remove(10);
-        }
-    }
 
 
     protected void updateEpicStatus(Epic epic) {
