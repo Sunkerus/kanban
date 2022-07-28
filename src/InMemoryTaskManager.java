@@ -7,6 +7,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> storageTask = new HashMap<>();
     private HashMap<Integer, Epic> storageEpic = new HashMap<>();
     private HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
+    private ArrayList<Task> historyList = new ArrayList<>();
 
     @Override
     public int generateId() {
@@ -33,6 +34,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) { //получение по id
 
+        historyList.add(storageTask.get(id));
         return storageTask.get(id);
     }
 
@@ -74,6 +76,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(int id) { //получение по id
 
+        historyList.add(storageEpic.get(id));
         return storageEpic.get(id);
     }
 
@@ -124,6 +127,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(int id) { //получение по id субтасков
 
+        historyList.add(storageSubtask.get(id));
         return storageSubtask.get(id);
     }
 
@@ -163,6 +167,11 @@ public class InMemoryTaskManager implements TaskManager {
             tempArrSubtask.add(storageSubtask.get(iterator));
         }
         return tempArrSubtask;
+    }
+
+    @Override
+    public ArrayList<Task> getHistory(){
+        return historyList;
     }
 
 

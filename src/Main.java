@@ -61,6 +61,16 @@ public class Main {
         System.out.println(manager.getAllEpic());
         System.out.println(manager.getAllSubtask());
 
+
+        System.out.println("\nПолучим задачу по id\n");
+        System.out.println("________________________________________________\n");
+        System.out.println(manager.getEpicById(1));
+
+
+        System.out.println("\nПолучим историю просмотров\n");
+        System.out.println("________________________________________________\n");
+        System.out.println(manager.getHistory());
+
     }
 
 }
