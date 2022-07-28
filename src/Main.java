@@ -79,12 +79,12 @@ public class Main {
 
         System.out.println("\nПолучим задачу по id\n");
         System.out.println("________________________________________________\n");
-        System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 12 раза, далее отобразится в истории
-        System.out.println(manager.getEpicById(1));         //также проверим, пройдёт ли проверку на переполнение
-        System.out.println(manager.getEpicById(1));         //в итоговом списке кол - во элементов будет ровно 10
+        System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 6 раз, далее отобразится в истории
         System.out.println(manager.getEpicById(1));
         System.out.println(manager.getEpicById(1));
         System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+
 
 
 
@@ -92,7 +92,29 @@ public class Main {
         System.out.println("\nПолучим историю просмотров\n");
         System.out.println("________________________________________________\n");
         System.out.println(historyManager.getHistory());
+        System.out.println(historyManager.getHistory().size());         //проверим кол - во элементов в массиве
 
+        System.out.println("\nПолучим задачу по id\n");
+        System.out.println("________________________________________________\n");
+        System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 6 раз, далее отобразится в истории
+        System.out.println(manager.getEpicById(1));         //сделаем 13 запросов и проверим будет ли переполнение массива
+        System.out.println(manager.getEpicById(1));         //в итоговом массиве с историем должно быть не больше 10 элементов
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+
+
+        System.out.println("\nПолучим историю просмотров\n");
+        System.out.println("________________________________________________\n");
+        System.out.println(historyManager.getHistory());
+        System.out.println(historyManager.getHistory().size());         //проверим кол - во элементов в массиве
     }
 
 }
