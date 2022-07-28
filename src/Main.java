@@ -2,7 +2,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Manager manager = new Manager();
+        InMemoryTaskManager manager = new InMemoryTaskManager();
 
         System.out.println("Создаём один эпик с 2 подзадачами\n");
         Epic newEpic1 = new Epic("name", "description");
