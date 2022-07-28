@@ -34,7 +34,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) { //получение по id
 
-        historyList.add(storageTask.get(id));
+        historyList.add(0, storageTask.get(id));
+        historyCheckOverflow();
         return storageTask.get(id);
     }
 
@@ -76,7 +77,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(int id) { //получение по id
 
-        historyList.add(storageEpic.get(id));
+        historyList.add(0, storageEpic.get(id));
+        historyCheckOverflow();
         return storageEpic.get(id);
     }
 
@@ -127,7 +129,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(int id) { //получение по id субтасков
 
-        historyList.add(storageSubtask.get(id));
+        historyList.add(0, storageSubtask.get(id));
+        historyCheckOverflow();
         return storageSubtask.get(id);
     }
 
@@ -174,11 +177,14 @@ public class InMemoryTaskManager implements TaskManager {
         return historyList;
     }
 
-   /* @Override
-    public void historyUpdate(Integer id){
-        historyList.add()
+
+    private void historyCheckOverflow(){
+
+        if (historyList.size() > 10) {
+            historyList.remove(10);
+        }
     }
-*/
+
 
     protected void updateEpicStatus(Epic epic) {
         //updateEpicStatus

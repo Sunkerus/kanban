@@ -67,6 +67,16 @@ public class Main {
         System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 3 раза, далее отобразится в истории
         System.out.println(manager.getEpicById(1));
         System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+        System.out.println(manager.getEpicById(1));
+
 
 
         System.out.println("\nПолучим историю просмотров\n");
