@@ -4,11 +4,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     private int generateId = 0;
 
-    private HashMap<Integer, Task> storageTask = new HashMap<>();
-    private HashMap<Integer, Epic> storageEpic = new HashMap<>();
-    private HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
+    private final HashMap<Integer, Task> storageTask = new HashMap<>();
+    private final HashMap<Integer, Epic> storageEpic = new HashMap<>();
+    private final HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
 
-    private InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+    private final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
 
 
@@ -25,8 +25,7 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Task> getAllTask() { //получение списка задач
 
         Collection<Task> values = storageTask.values();
-        ArrayList<Task> listOfValues = new ArrayList<>(values);
-        return listOfValues;
+        return new ArrayList<>(values);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) { //получение по id
 
-        historyManager.add(storageTask.get(id));
+        historyManager.add( storageTask.get(id));
         return storageTask.get(id);
     }
 
@@ -66,8 +65,7 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Epic> getAllEpic() { //получение списка эпиков
 
         Collection<Epic> values = storageEpic.values();
-        ArrayList<Epic> listOfValues = new ArrayList<>(values);
-        return listOfValues;
+        return new ArrayList<>(values);
     }
 
     @Override
@@ -113,8 +111,7 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Subtask> getAllSubtask() { //получение списка подзадач
 
         Collection<Subtask> values = storageSubtask.values();
-        ArrayList<Subtask> listOfValues = new ArrayList<>(values);
-        return listOfValues;
+        return new ArrayList<>(values);
     }
 
 
