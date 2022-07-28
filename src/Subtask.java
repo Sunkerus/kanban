@@ -1,6 +1,7 @@
-public class Subtask extends Task{
+public class Subtask extends Task {
 
     private int epicId;
+
     Subtask(String name, String description) {
 
         super(name, description);
@@ -19,7 +20,7 @@ public class Subtask extends Task{
     public String toString() {
 
         return "Type: Subtask, " +
-                "Id = " + id  + ", " +
+                "Id = " + id + ", " +
                 "name = " + name + ", " +
                 "description = " + description + ", " +
                 "statusTask = " + status;

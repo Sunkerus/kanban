@@ -50,12 +50,9 @@ public class Main {
         System.out.println(manager.getEpicById(4));
 
 
-
         System.out.println("\nПолучим историю просмотров\n");
         System.out.println("________________________________________________\n");
         System.out.println(historyManager.getHistory());
-
-
 
 
         System.out.println("\nУдалим эпик newEpic2\n");
@@ -84,9 +81,6 @@ public class Main {
         System.out.println(manager.getEpicById(1));
         System.out.println(manager.getEpicById(1));
         System.out.println(manager.getEpicById(1));
-
-
-
 
 
         System.out.println("\nПолучим историю просмотров\n");

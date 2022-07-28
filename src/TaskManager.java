@@ -10,6 +10,7 @@ public interface TaskManager {
 
 
     void removeAllTask();
+
     Task getTaskById(int id);
 
     void createTask(Task task);

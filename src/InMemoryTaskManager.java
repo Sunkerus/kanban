@@ -11,7 +11,6 @@ public class InMemoryTaskManager implements TaskManager {
     private final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
 
-
     @Override
     public int generateId() {
 
@@ -36,7 +35,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) { //получение по id
 
-        historyManager.add( storageTask.get(id));
+        historyManager.add(storageTask.get(id));
         return storageTask.get(id);
     }
 
@@ -168,7 +167,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
         return tempArrSubtask;
     }
-
 
 
     protected void updateEpicStatus(Epic epic) {
