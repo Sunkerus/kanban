@@ -31,7 +31,7 @@ public class Main {
 
         System.out.println("\nИзменим статус newSubtask2_1 на DONE\n");
         System.out.println("________________________________________________\n");
-        newSubtask2_1.setStatus(2);
+        newSubtask2_1.setStatus(StatusTask.DONE);
         manager.updateSubtask(newSubtask2_1);
         System.out.println(manager.getAllEpic());
         System.out.println(manager.getAllSubtask());
@@ -64,6 +64,8 @@ public class Main {
 
         System.out.println("\nПолучим задачу по id\n");
         System.out.println("________________________________________________\n");
+        System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 3 раза, далее отобразится в истории
+        System.out.println(manager.getEpicById(1));
         System.out.println(manager.getEpicById(1));
 
 

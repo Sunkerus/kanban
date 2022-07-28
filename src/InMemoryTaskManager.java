@@ -7,7 +7,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> storageTask = new HashMap<>();
     private HashMap<Integer, Epic> storageEpic = new HashMap<>();
     private HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
-    private ArrayList<Task> historyList = new ArrayList<>();
+    private List<Task> historyList = new ArrayList<>();
 
     @Override
     public int generateId() {
@@ -118,7 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeAllSubtask() { //удаление всех субтасков
         for (Epic iterator : storageEpic.values()) { //обновление статусов всех эпиков
-            iterator.setStatus(0);
+            iterator.setStatus(StatusTask.NEW);
             iterator.clearAllId();                   //очистка коллекции идентификаторов в каждом эпике
         }
         storageSubtask.clear();
@@ -170,10 +170,15 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory(){
+    public List<Task> getHistory(){
         return historyList;
     }
 
+   /* @Override
+    public void historyUpdate(Integer id){
+        historyList.add()
+    }
+*/
 
     protected void updateEpicStatus(Epic epic) {
         //updateEpicStatus
@@ -181,20 +186,20 @@ public class InMemoryTaskManager implements TaskManager {
         boolean checkStatusDONE = true;
         if (!epic.getSubtasksId().isEmpty()) {
             for (Integer iterator : epic.getSubtasksId()) {
-                if (!Objects.equals(storageSubtask.get(iterator).getStatus(), "NEW")) {
+                if (!Objects.equals(storageSubtask.get(iterator).getStatus(), StatusTask.NEW)) {
                     checkStatusNEW = false;
                 }
-                if (!Objects.equals(storageSubtask.get(iterator).getStatus(), "DONE")) {
+                if (!Objects.equals(storageSubtask.get(iterator).getStatus(), StatusTask.DONE)) {
                     checkStatusDONE = false;
                 }
             }
         }
         if (checkStatusNEW) {
-            epic.setStatus(0);
+            epic.setStatus(StatusTask.NEW);
         } else if (checkStatusDONE) {
-            epic.setStatus(2);
+            epic.setStatus(StatusTask.DONE);
         } else {
-            epic.setStatus(1);
+            epic.setStatus(StatusTask.IN_PROGRESS);
         }
     }
 }

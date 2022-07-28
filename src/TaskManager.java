@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.List;
+
 
 public interface TaskManager {
 
@@ -55,5 +55,7 @@ public interface TaskManager {
     ArrayList<Subtask> getListSubtaskOfEpic(Integer id);
 
 
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
+
+    //void historyUpdate(Integer id);
 }

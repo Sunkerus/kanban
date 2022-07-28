@@ -3,21 +3,20 @@ public class Task {
     protected String description;
     protected String statusTask;
     protected Integer id;
-
-    private String[] statusTaskStorage = new String[]{"NEW", "IN_PROGRESS", "DONE"};
+    protected StatusTask status;
 
     Task(String name, String description) {
         this.name = name;
         this.description = description;
-        this.statusTask = statusTaskStorage[0]; // statusTask = NEW;
+        this.status = StatusTask.NEW;
     }
 
-    public void setStatus(int taskStatusId) {
-        statusTask = statusTaskStorage[taskStatusId];
+    public void setStatus(StatusTask status) {
+        this.status = status;
     }
 
-    public String getStatus() {
-        return statusTask;
+    public StatusTask getStatus() {
+        return status;
     }
 
 
@@ -53,7 +52,7 @@ public class Task {
                 "Id = " + id + ", " +
                 "name = " + name + ", " +
                 "description = " + description + ", " +
-                "statusTask = " + statusTask;
+                "statusTask = " + status;
     }
 
 
