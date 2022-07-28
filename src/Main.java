@@ -45,11 +45,25 @@ public class Main {
         System.out.println(manager.getAllSubtask());
 
 
+        System.out.println("\nВызовем эпик newEpic2\n");
+        System.out.println("________________________________________________\n");
+        System.out.println(manager.getEpicById(4));
+
+
+
+        System.out.println("\nПолучим историю просмотров\n");
+        System.out.println("________________________________________________\n");
+        System.out.println(historyManager.getHistory());
+
+
+
+
         System.out.println("\nУдалим эпик newEpic2\n");
         System.out.println("________________________________________________\n");
         manager.deleteEpicById(4);
         System.out.println(manager.getAllEpic());
         System.out.println(manager.getAllSubtask());
+
 
         System.out.println("\nПолучим подзадачи из newEpic1\n");
         System.out.println("________________________________________________\n");
@@ -65,18 +79,13 @@ public class Main {
 
         System.out.println("\nПолучим задачу по id\n");
         System.out.println("________________________________________________\n");
-        System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 3 раза, далее отобразится в истории
+        System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 12 раза, далее отобразится в истории
+        System.out.println(manager.getEpicById(1));         //также проверим, пройдёт ли проверку на переполнение
+        System.out.println(manager.getEpicById(1));         //в итоговом списке кол - во элементов будет ровно 10
         System.out.println(manager.getEpicById(1));
         System.out.println(manager.getEpicById(1));
         System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
+
 
 
 
