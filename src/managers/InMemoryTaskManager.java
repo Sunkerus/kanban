@@ -1,4 +1,8 @@
+package managers;
+
 import java.util.*;
+
+import tasks.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -8,7 +12,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Epic> storageEpic = new HashMap<>();
     private final HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
 
-    private final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+    private final InMemoryHistoryManager historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory();
 
 
     @Override
@@ -35,8 +39,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) { //получение по id
 
-        historyManager.add(storageTask.get(id));
-        return storageTask.get(id);
+        Task storageTaskTemp = storageTask.get(id);
+        historyManager.add(storageTaskTemp);
+        return storageTaskTemp;
     }
 
     @Override
@@ -76,8 +81,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(int id) { //получение по id
 
-        historyManager.add(storageEpic.get(id));
-        return storageEpic.get(id);
+        Epic storageEpicTemp = storageEpic.get(id);
+        historyManager.add(storageEpicTemp);
+        return storageEpicTemp;
     }
 
     @Override
@@ -126,8 +132,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(int id) { //получение по id субтасков
 
-        historyManager.add(storageSubtask.get(id));
-        return storageSubtask.get(id);
+        Subtask storageSubtaskTemp = storageSubtask.get(id);
+        historyManager.add(storageSubtaskTemp);
+        return storageSubtaskTemp;
     }
 
     @Override

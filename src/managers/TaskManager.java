@@ -1,4 +1,7 @@
-import java.util.ArrayList;
+package managers;
+
+import tasks.*;
+
 import java.util.List;
 
 
@@ -6,7 +9,7 @@ public interface TaskManager {
 
     int generateId();
 
-    ArrayList<Task> getAllTask();
+    List<Task> getAllTask();
 
 
     void removeAllTask();
@@ -22,7 +25,7 @@ public interface TaskManager {
 
     //методы для эпиков
 
-    ArrayList<Epic> getAllEpic();
+    List<Epic> getAllEpic();
 
 
     void removeAllEpic();
@@ -37,7 +40,7 @@ public interface TaskManager {
 
     //методя для подзадач
 
-    ArrayList<Subtask> getAllSubtask();
+    List<Subtask> getAllSubtask();
 
 
     void removeAllSubtask();
@@ -53,7 +56,6 @@ public interface TaskManager {
 
 //additional methods
 
-    ArrayList<Subtask> getListSubtaskOfEpic(Integer id);
-
+    List<Subtask> getListSubtaskOfEpic(Integer id);
 
 }
