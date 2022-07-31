@@ -5,8 +5,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        InMemoryTaskManager manager = (InMemoryTaskManager) Managers.getDefault();
-        InMemoryHistoryManager historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory();
+        TaskManager manager =  Managers.getDefault();
+        HistoryManager historyManager = Managers.getDefaultHistory();
 
         System.out.println("Создаём один эпик с 2 подзадачами\n");
         Epic newEpic1 = new Epic("name", "description");
