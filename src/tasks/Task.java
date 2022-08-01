@@ -3,7 +3,6 @@ package tasks;
 public class Task {
     protected String name;
     protected String description;
-    protected String statusTask;
     protected Integer id;
     protected StatusTask status;
 

@@ -6,7 +6,6 @@ public class Main {
     public static void main(String[] args) {
 
         TaskManager manager =  Managers.getDefault();
-        HistoryManager historyManager = Managers.getDefaultHistory();
 
         System.out.println("Создаём один эпик с 2 подзадачами\n");
         Epic newEpic1 = new Epic("name", "description");
@@ -55,7 +54,7 @@ public class Main {
 
         System.out.println("\nПолучим историю просмотров\n");
         System.out.println("________________________________________________\n");
-        System.out.println(historyManager.getHistory());
+        System.out.println(manager.getHistory());
 
 
         System.out.println("\nУдалим эпик newEpic2\n");
@@ -88,8 +87,8 @@ public class Main {
 
         System.out.println("\nПолучим историю просмотров\n");
         System.out.println("________________________________________________\n");
-        System.out.println(historyManager.getHistory());
-        System.out.println(historyManager.getHistory().size());         //проверим кол - во элементов в массиве
+        System.out.println(manager.getHistory());
+        System.out.println(manager.getHistory().size());         //проверим кол - во элементов в массиве
 
         System.out.println("\nПолучим задачу по id\n");
         System.out.println("________________________________________________\n");
@@ -110,8 +109,8 @@ public class Main {
 
         System.out.println("\nПолучим историю просмотров\n");
         System.out.println("________________________________________________\n");
-        System.out.println(historyManager.getHistory());
-        System.out.println(historyManager.getHistory().size());         //проверим кол - во элементов в массиве
+        System.out.println(manager.getHistory());
+        System.out.println(manager.getHistory().size());         //проверим кол - во элементов в массиве
     }
 
 }
