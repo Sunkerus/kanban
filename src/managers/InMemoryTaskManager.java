@@ -4,7 +4,7 @@ import java.util.*;
 
 import tasks.*;
 
-public class InaMemoryTaskManager implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
 
     private int generateId = 0;
 
