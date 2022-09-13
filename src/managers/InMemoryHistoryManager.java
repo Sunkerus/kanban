@@ -22,4 +22,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         return historyList;
     }
 
+    @Override
+    public void remove(int id) {
+
+    }
+
 }
