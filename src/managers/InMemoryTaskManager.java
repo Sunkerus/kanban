@@ -33,7 +33,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTask() { //удаление всех задач
+        //? delete all tasks
         storageTask.clear();
+
     }
 
     @Override
@@ -59,6 +61,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskById(int id) {
+
+
         storageTask.remove(id);
     }
 
