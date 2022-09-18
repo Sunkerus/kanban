@@ -10,59 +10,45 @@ import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final List<Task> historyList = new ArrayList<>();
-
-    @Override
-    public void add(Task task) {
-        historyList.add(0, task);
-        if (historyList.size() > 10) {
-            historyList.remove(10);
-        }
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return historyList;
-    }
-
-    @Override
-    public void remove(int id) {
-        historyList.remove(id);
-    } // переделать
-
-
-
     //CustomLinkedList
-    public Map<Integer, Node> HashTable = new HashMap<>();
-
-    //метод для Hash table
+    public Map<Integer, Node<Task>> historyList = new HashMap<>();
 
         //реализация CustomLinkedList
         public Node<Task> head;
         public Node<Task> tail;
         private int size = 0;
 
-        public void linkLast (Task task) {
+        public void linkLast (Node<Task> node) {
             //метод добавляет задачу в конец списка custom linked list
+             if (size == 0) {
+                 head = node;
+             } else {
+                 tail = node;
+             }
+            size++;
+            historyList.put (size,node);
         }
 
         public ArrayList<Task> getTasks () {
 
             return null;
-            //return custom linked list -> array list <task>
 
-            /*
-            """""""""""""""""""""""""""""""""""""""""""
-            if (task.equals task Custom linked list )  {
-               Node.removeNode(Node node);
-               Node.add (task);
-               HashTable.add(id);
-            }else {
+          }
 
-            returnrrayList;
-            }
-            */
-        }
+    @Override
+    public void add(Task task) {        //add task and remove if task already existing
+
+    }
+
+    @Override
+    public List<Task> getHistory() {    //method must returned history list
+        return null;
+    }
+
+    @Override
+    public void remove(int id) {        //method must remove task from HashMap historyList
+
+    }
 
     class Node <T> {
 
