@@ -12,8 +12,28 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private final List<Task> historyList = new ArrayList<>();
 
+    @Override
+    public void add(Task task) {
+        historyList.add(0, task);
+        if (historyList.size() > 10) {
+            historyList.remove(10);
+        }
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyList;
+    }
+
+    @Override
+    public void remove(int id) {
+        historyList.remove(id);
+    } // переделать
+
+
+
     //CustomLinkedList
-    public Map<Integer, Node> HashTable = new HashMap<>(); //двусвязный список?
+    public Map<Integer, Node> HashTable = new HashMap<>();
 
     //метод для Hash table
 
@@ -23,12 +43,13 @@ public class InMemoryHistoryManager implements HistoryManager {
         private int size = 0;
 
         public void linkLast (Task task) {
-
+            //метод добавляет задачу в конец списка custom linked list
         }
 
         public ArrayList<Task> getTasks () {
 
-            return null; //return custoom linked list -> array list <task>
+            return null;
+            //return custom linked list -> array list <task>
 
             /*
             """""""""""""""""""""""""""""""""""""""""""
@@ -37,6 +58,8 @@ public class InMemoryHistoryManager implements HistoryManager {
                Node.add (task);
                HashTable.add(id);
             }else {
+
+            returnrrayList;
             }
             */
         }
@@ -57,23 +80,4 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         }
     }
-
-    @Override
-    public void add(Task task) {
-        historyList.add(0, task);
-        if (historyList.size() > 10) {
-            historyList.remove(10);
-        }
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return historyList;
-    }
-
-    @Override
-    public void remove(int id) {
-        historyList.remove(id);
-    }
-
 }
