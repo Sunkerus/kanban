@@ -95,16 +95,7 @@ public class Main {
         System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 6 раз, далее отобразится в истории
         System.out.println(manager.getEpicById(1));         //сделаем 13 запросов и проверим будет ли переполнение массива
         System.out.println(manager.getEpicById(1));         //в итоговом массиве с историем должно быть не больше 10 элементов
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
+
 
 
         System.out.println("\nПолучим историю просмотров\n");

@@ -22,8 +22,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         } else {
             tail = node;
         }
-        size++;
         historyList.put(key, node);
+        size++;
     }
 
     @Override
@@ -60,10 +60,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         size--;
     }
 
-    public void removeNode(Node<Task> node) {
-        if (head == null || node == null) {
-            return;
-        } else if (head == node) {
+    private void removeNode(Node<Task> node) {
+        if (head == node) {
             head = node.next;
         } else if (node.next != null) {
             node.next.prev = node.prev;
@@ -72,16 +70,27 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    static class Node<Task> {
+     class Node<Task> {
 
-        public Task data;
-        public Node<Task> next;
-        public Node<Task> prev;
+        private Task data;
+        private Node<Task> next;
+        protected Node<Task> prev;
 
         public Node(Task data) {
             this.data = data;
             this.next = null;
             this.prev = null;
+        }
+
+        //переопределеим equals для сравнения задач в historyList
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Node<Task> node = (Node<Task>) o;
+
+            return data.equals(node.data);
         }
     }
 }
