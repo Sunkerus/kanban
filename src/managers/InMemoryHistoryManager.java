@@ -8,39 +8,34 @@ import java.util.*;
 public class InMemoryHistoryManager implements HistoryManager {
 
     //CustomLinkedList
-    public Map<Integer, Node<Task>> historyList = new HashMap<>();
+    public Map<Integer, Node<Task>> historyList = new LinkedHashMap<>();
 
     //реализация CustomLinkedList
     public Node<Task> head;
     public Node<Task> tail;
     private int size = 0;
 
-    public void linkLast(Node<Task> node, int key) {
-        //метод добавляет задачу в конец списка custom linked list
+    public void linkLast(Node<Task> node) {
         if (size == 0) {
             head = node;
         } else {
             tail = node;
         }
-        historyList.put(key, node);
+        int id = node.data.getId();
+        historyList.remove(id);
+        historyList.put(id, node);
         size++;
     }
 
     @Override
     public void add(Task task) {
-        int keyNode = size;
+
         Node<Task> nodeTask = new Node<>(task);
         if (!historyList.containsValue(nodeTask)) {
-            linkLast(nodeTask, keyNode);
-            // нужен цикл по получению ключа
+            linkLast(nodeTask);
         } else {
-            for (Map.Entry<Integer, Node<Task>> taskNode : historyList.entrySet()) {
-                if (taskNode.getValue().data.equals(task)) {
-                    keyNode = taskNode.getKey();
-                }
-            }
             removeNode(nodeTask);
-            linkLast(nodeTask, keyNode);
+            linkLast(nodeTask);
         }
     }
 
@@ -61,19 +56,25 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void removeNode(Node<Task> node) {
-        if (head == node) {
-            head = node.next;
-        } else if (node.next != null) {
-            node.next.prev = node.prev;
-        } else if (node.prev != null) {
-            node.prev.next = null;
-        }
+            if (head == null || node == null) {
+                return;
+            }
+            if (head == node) {
+                head = node.next;
+            }
+            if (node.next != null) {
+                node.next.prev = node.prev;
+            }
+
+            if (node.prev != null) {
+                node.prev.next = node.next;
+            }
     }
 
      class Node<Task> {
 
-        private Task data;
-        private Node<Task> next;
+        protected Task data;
+        protected Node<Task> next;
         protected Node<Task> prev;
 
         public Node(Task data) {
