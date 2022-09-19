@@ -11,7 +11,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public Map<Integer, Node<Task>> historyList = new HashMap<>();
 
         //реализация CustomLinkedList
-        public Node head;
+        public Node<Task> head;
         public Node<Task> tail;
         private int size = 0;
 
@@ -43,7 +43,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public List<Task> getHistory() {    //method must returned history list
+    public List<Task> getHistory() {    //method must return history list
         ArrayList<Task> values = new ArrayList<>();
         for (Node<Task> value: historyList.values()) {
             values.add(value.data);
@@ -71,7 +71,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
     }
-    class Node <Task> {
+    static class Node <Task> {
 
         public Task data;
         public Node<Task> next;
