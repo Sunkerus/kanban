@@ -7,7 +7,7 @@ public class Main {
 
         TaskManager manager =  Managers.getDefault();
 
-        System.out.println("Создаём один эпик с 2 подзадачами\n");
+        System.out.println("Создадим две задачи, эпик с тремя подзадачами и эпик без подзадач\n");
         Epic newEpic1 = new Epic("name", "description");
         Subtask newSubtask1_1 = new Subtask("name", "description");
         Subtask newSubtask1_2 = new Subtask("name", "description");
