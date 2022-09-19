@@ -7,7 +7,14 @@ public class Main {
 
         TaskManager manager =  Managers.getDefault();
 
-        System.out.println("Создадим две задачи, эпик с тремя подзадачами и эпик без подзадач\n");
+        System.out.println("\nТестирование работы программы\n");
+        System.out.println("________________________________________________\n");
+        System.out.println("\nCоздайте две задачи, эпик с тремя подзадачами и эпик без подзадач;\n");
+        Task task1 = new Task("name", "description");
+        Task task2 = new Task("name", "description");
+        manager.createTask(task1);
+        manager.createTask(task2);
+
         Epic newEpic1 = new Epic("name", "description");
         Subtask newSubtask1_1 = new Subtask("name", "description");
         Subtask newSubtask1_2 = new Subtask("name", "description");
@@ -28,80 +35,30 @@ public class Main {
 
         manager.createSubtask(newSubtask2_1);
 
-
+        System.out.println("\nПроверим, создались ли задачи\n");
+        System.out.println("________________________________________________\n");
         System.out.println(manager.getAllEpic());
         System.out.println(manager.getAllSubtask());
+        System.out.println(manager.getAllTask());
 
-        System.out.println("\nИзменим статус newSubtask2_1 на DONE\n");
+        System.out.println("\nзапросите созданные задачи несколько раз в разном порядке;\n");
         System.out.println("________________________________________________\n");
-        newSubtask2_1.setStatus(StatusTask.DONE);
-        manager.updateSubtask(newSubtask2_1);
-        System.out.println(manager.getAllEpic());
-        System.out.println(manager.getAllSubtask());
-
-
-        System.out.println("\nУдалим подзадачу из эпика со статусом DONE newEpic2\n");
-        System.out.println("________________________________________________\n");
-        manager.deleteSubtaskById(5);
-        System.out.println(manager.getAllEpic());
-        System.out.println(manager.getAllSubtask());
-
-
-        System.out.println("\nВызовем эпик newEpic2\n");
-        System.out.println("________________________________________________\n");
-        System.out.println(manager.getEpicById(4));
+        System.out.println(manager.getTaskById(1));
+        System.out.println(manager.getEpicById(3));
+        System.out.println(manager.getSubtaskById(4));
+        System.out.println(manager.getEpicById(3));
 
 
         System.out.println("\nПолучим историю просмотров\n");
         System.out.println("________________________________________________\n");
         System.out.println(manager.getHistory());
-
+        System.out.println("Получим получим кол - во элементов в истории без повторов: " + manager.getHistory().size());
 
         System.out.println("\nУдалим эпик newEpic2\n");
         System.out.println("________________________________________________\n");
-        manager.deleteEpicById(4);
-        System.out.println(manager.getAllEpic());
-        System.out.println(manager.getAllSubtask());
-
-
-        System.out.println("\nПолучим подзадачи из newEpic1\n");
-        System.out.println("________________________________________________\n");
-        System.out.println(manager.getListSubtaskOfEpic(1));
-
-
-        System.out.println("\nУдалим все сабтаски\n");
-        System.out.println("________________________________________________\n");
-        manager.removeAllSubtask();
-        System.out.println(manager.getAllEpic());
-        System.out.println(manager.getAllSubtask());
-
-
-        System.out.println("\nПолучим задачу по id\n");
-        System.out.println("________________________________________________\n");
-        System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 6 раз, далее отобразится в истории
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-        System.out.println(manager.getEpicById(1));
-
-
-        System.out.println("\nПолучим историю просмотров\n");
-        System.out.println("________________________________________________\n");
+        manager.deleteEpicById(3);
         System.out.println(manager.getHistory());
-        System.out.println(manager.getHistory().size());         //проверим кол - во элементов в массиве
-
-        System.out.println("\nПолучим задачу по id\n");
-        System.out.println("________________________________________________\n");
-        System.out.println(manager.getEpicById(1));         //сделаем запрос к эпику 6 раз, далее отобразится в истории
-        System.out.println(manager.getEpicById(1));         //сделаем 13 запросов и проверим будет ли переполнение массива
-        System.out.println(manager.getEpicById(1));         //в итоговом массиве с историем должно быть не больше 10 элементов
-
-
-
-        System.out.println("\nПолучим историю просмотров\n");
-        System.out.println("________________________________________________\n");
-        System.out.println(manager.getHistory());
-        System.out.println(manager.getHistory().size());         //проверим кол - во элементов в массиве
+        System.out.println("Получим получим кол - во элементов в истории без повторов: " + manager.getHistory().size());
     }
 
 }
