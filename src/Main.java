@@ -5,7 +5,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TaskManager manager =  Managers.getDefault();
+        TaskManager manager = Managers.getDefault();
 
         System.out.println("\nТестирование работы программы\n");
         System.out.println("________________________________________________\n");
@@ -71,8 +71,6 @@ public class Main {
         System.out.println(manager.getAllEpic());
         System.out.println(manager.getAllSubtask());
         System.out.println(manager.getAllTask());
-
-
 
 
     }

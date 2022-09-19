@@ -40,7 +40,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public List<Task> getHistory() {    //method must return history list
+    public List<Task> getHistory() {
         ArrayList<Task> values = new ArrayList<>();
         for (Node<Task> value : historyList.values()) {
             values.add(value.data);
@@ -48,32 +48,31 @@ public class InMemoryHistoryManager implements HistoryManager {
         return values;
     }
 
-<<<<<<< HEAD
-=======
+
     @Override
-    public void remove(int id) {        //method must remove task from HashMap historyLis
+    public void remove(int id) {
         removeNode(historyList.get(id));
         historyList.remove(id);
         size--;
     }
 
     private void removeNode(Node<Task> node) {
-            if (head == null || node == null) {
-                return;
-            }
-            if (head == node) {
-                head = node.next;
-            }
-            if (node.next != null) {
-                node.next.prev = node.prev;
-            }
+        if (head == null || node == null) {
+            return;
+        }
+        if (head == node) {
+            head = node.next;
+        }
+        if (node.next != null) {
+            node.next.prev = node.prev;
+        }
 
-            if (node.prev != null) {
-                node.prev.next = node.next;
-            }
+        if (node.prev != null) {
+            node.prev.next = node.next;
+        }
     }
 
-     class Node<Task> {
+    class Node<Task> {
 
         protected Task data;
         protected Node<Task> next;
@@ -96,5 +95,4 @@ public class InMemoryHistoryManager implements HistoryManager {
             return data.equals(node.data);
         }
     }
->>>>>>> feature/sprint-5
 }
