@@ -18,10 +18,13 @@ public class Main {
         Epic newEpic1 = new Epic("name", "description");
         Subtask newSubtask1_1 = new Subtask("name", "description");
         Subtask newSubtask1_2 = new Subtask("name", "description");
+        Subtask newSubtask1_3 = new Subtask("name","description");
 
         manager.createEpic(newEpic1);
-        newSubtask1_1.setEpicId(newEpic1.getId()); // привязываем сабтаск к epic
+        newSubtask1_1.setEpicId(newEpic1.getId()); // привязываем сабтаск к epic (
         newSubtask1_2.setEpicId(newEpic1.getId());
+        newSubtask1_3.setEpicId(newEpic1.getId());
+
 
         manager.createSubtask(newSubtask1_1);
         manager.createSubtask(newSubtask1_2);
@@ -45,7 +48,9 @@ public class Main {
         System.out.println("________________________________________________\n");
         System.out.println(manager.getTaskById(1));
         System.out.println(manager.getEpicById(3));
+
         System.out.println(manager.getSubtaskById(4));
+        System.out.println(manager.getHistory());           //дополнительный вызов
         System.out.println(manager.getEpicById(3));
 
 

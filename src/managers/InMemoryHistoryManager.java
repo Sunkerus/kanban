@@ -8,14 +8,14 @@ import java.util.*;
 public class InMemoryHistoryManager implements HistoryManager {
 
     //CustomLinkedList
-    public Map<Integer, Node<Task>> historyList = new LinkedHashMap<>();
+    private Map<Integer, Node<Task>> historyList = new HashMap<>();
 
     //реализация CustomLinkedList
-    public Node<Task> head;
-    public Node<Task> tail;
+    private Node<Task> head;
+    private Node<Task> tail;
     private int size = 0;
 
-    public void linkLast(Node<Task> node) {
+    private void linkLast(Node<Task> node) {
         if (size == 0) {
             head = node;
         } else {
@@ -31,7 +31,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void add(Task task) {
 
         Node<Task> nodeTask = new Node<>(task);
-        if (!historyList.containsValue(nodeTask)) {
+        if (!historyList.containsKey(task.getId())) {
             linkLast(nodeTask);
         } else {
             removeNode(nodeTask);
@@ -42,7 +42,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public List<Task> getHistory() {
         ArrayList<Task> values = new ArrayList<>();
-        for (Node<Task> value : historyList.values()) {
+        for (Node<Task> value : historyList.values()) {        //change to head
             values.add(value.data);
         }
         return values;
@@ -51,9 +51,8 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        removeNode(historyList.get(id));
-        historyList.remove(id);
-        size--;
+        removeNode(historyList.remove(id));
+         size--;
     }
 
     private void removeNode(Node<Task> node) {
@@ -61,7 +60,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             return;
         }
         if (head == node) {
-            head = node.next;
+            head = node.next;       //change!
         }
         if (node.next != null) {
             node.next.prev = node.prev;
@@ -72,13 +71,13 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    class Node<Task> {
+        private class Node<Task> {
 
         protected Task data;
         protected Node<Task> next;
         protected Node<Task> prev;
 
-        public Node(Task data) {
+        private Node(Task data) {
             this.data = data;
             this.next = null;
             this.prev = null;
@@ -96,3 +95,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 }
+
+
+
+
