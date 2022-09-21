@@ -28,6 +28,7 @@ public class Main {
 
         manager.createSubtask(newSubtask1_1);
         manager.createSubtask(newSubtask1_2);
+        manager.createSubtask(newSubtask1_3);
 
         System.out.println("Создаём один эпик с 1 подзадачей\n");
         Epic newEpic2 = new Epic("name", "description");
@@ -48,9 +49,13 @@ public class Main {
         System.out.println("________________________________________________\n");
         System.out.println(manager.getTaskById(1));
         System.out.println(manager.getEpicById(3));
-
+        System.out.println("___________________История__________________\n");
+        System.out.println(manager.getHistory());           //дополнительный вызов истории
+        System.out.println("=============================================\n");
         System.out.println(manager.getSubtaskById(4));
-        System.out.println(manager.getHistory());           //дополнительный вызов
+        System.out.println("___________________История__________________\n");
+        System.out.println(manager.getHistory());           //дополнительный вызов истории
+        System.out.println("============================================\n");
         System.out.println(manager.getEpicById(3));
 
 
