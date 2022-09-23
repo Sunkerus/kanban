@@ -49,13 +49,17 @@ public class Main {
         System.out.println("________________________________________________\n");
         System.out.println(manager.getTaskById(1));
         System.out.println(manager.getEpicById(3));
-        System.out.println("___________________История__________________\n");
+        System.out.println();
+        System.out.println("====================История====================\n");
         System.out.println(manager.getHistory());           //дополнительный вызов истории
         System.out.println("=============================================\n");
+        System.out.println();
         System.out.println(manager.getSubtaskById(4));
-        System.out.println("___________________История__________________\n");
+        System.out.println();
+        System.out.println("====================История====================\n");
         System.out.println(manager.getHistory());           //дополнительный вызов истории
         System.out.println("============================================\n");
+        System.out.println();
         System.out.println(manager.getEpicById(3));
 
 
