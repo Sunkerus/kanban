@@ -52,15 +52,18 @@ public class Main {
         System.out.println();
         System.out.println("====================История====================\n");
         System.out.println(manager.getHistory());           //дополнительный вызов истории
+        System.out.println("Получим получим кол - во элементов в истории без повторов: " + manager.getHistory().size());
         System.out.println("=============================================\n");
         System.out.println();
         System.out.println(manager.getSubtaskById(4));
         System.out.println();
         System.out.println("====================История====================\n");
         System.out.println(manager.getHistory());           //дополнительный вызов истории
+        System.out.println("Получим получим кол - во элементов в истории без повторов: " + manager.getHistory().size());
         System.out.println("============================================\n");
         System.out.println();
         System.out.println(manager.getEpicById(3));
+        System.out.println(manager.getSubtaskById(4));
 
 
         System.out.println("\nПолучим историю просмотров в порядке обращанеия к записям: старые --> новые \n");
@@ -74,7 +77,7 @@ public class Main {
         System.out.println(manager.getHistory());
         System.out.println("Получим получим кол - во элементов в истории: " + manager.getHistory().size());
 
-        System.out.println("\nУдалим эпик, который вызвали ранее методом manager.getTaskById(1) \n");
+        System.out.println("\nУдалим эпик, который вызвали ранее методом manager.getEpicById(3) \n");
         System.out.println("________________________________________________\n");
         manager.deleteEpicById(3);
         System.out.println(manager.getHistory());
