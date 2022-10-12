@@ -18,10 +18,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (head == null) {
             head = node;
             tail = head;
-        } else if (head == tail) {
-            head.next = node;
-            node.prev = head;
-            tail = node;
         } else {
             tail.next = node;
             node.prev = tail;
