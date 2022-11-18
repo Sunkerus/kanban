@@ -71,7 +71,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
-
     @Override
     public ArrayList<Task> getAllTask() { //получение списка задач
         save();
@@ -81,8 +80,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public void removeAllTask() { //удаление всех задач
-        save();
         super.removeAllTask();
+        save();
 
 
     }
@@ -101,14 +100,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public void updateTask(Task task) { // обновление задачи
-
-        storageTask.put(task.getId(), task);
+        super.updateTask(task);
+        save();
     }
 
     @Override
-    public void deleteTaskById(int id) {
-        storageTask.remove(id);
-        historyManager.remove(id);
+    public void deleteTaskById(int id) { // проверить на возможные исключения throwable
+        deleteTaskById(id);
+        save();
     }
 
 
@@ -123,8 +122,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public void removeAllEpic() { //удаление всех эпиков
-        storageEpic.clear();
-        storageSubtask.clear();         //удаляем все сабтаски
+        super.removeAllEpic();
+        save();                        //удаляем все сабтаски
     }
 
     @Override
@@ -137,27 +136,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public void createEpic(Epic epic) { // создание эпика(объект передаётся в качестве параметра)
-
-        storageEpic.put(generateId(), epic);
-        epic.setId(generateId);
+            super.createEpic(epic);
+            save();
     }
 
     @Override
     public void updateEpic(Epic epic) { // обновление эпика
-        storageTask.put(epic.getId(), epic);
+        super.updateEpic();
+        save();
     }
 
     @Override
     public void deleteEpicById(int id) {
-        //копируем массив
-        ArrayList<Integer> tempSubtaskIdArr = new ArrayList<>(storageEpic.get(id).getSubtasksId());
-
-        for (Integer iterator : tempSubtaskIdArr) {
-            deleteSubtaskById(iterator);
-            historyManager.remove(iterator);
-        }
-        storageEpic.remove(id);
-        historyManager.remove(id);
+        super.deleteEpicById(id);
+        save();
     }
 
 
@@ -165,7 +157,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public ArrayList<Subtask> getAllSubtask() { //получение списка подзадач
-
         Collection<Subtask> values = storageSubtask.values();
         return new ArrayList<>(values);
     }
@@ -173,11 +164,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public void removeAllSubtask() { //удаление всех субтасков
-        for (Epic iterator : storageEpic.values()) { //обновление статусов всех эпиков
-            iterator.setStatus(StatusTask.NEW);
-            iterator.clearAllId();                   //очистка коллекции идентификаторов в каждом эпике
-        }
-        storageSubtask.clear();
+        super.removeAllSubtask();
+        save();
     }
 
     @Override
@@ -190,18 +178,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public void createSubtask(Subtask subtask) { // создание сабтаска(объект передаётся в качестве параметра)
-
-        storageSubtask.put(generateId(), subtask);      //добавление подзадачи в MAP для подзадач  в эпике
-        subtask.setId(generateId); //присвоение id
-        storageEpic.get(subtask.getEpicId()).addId(subtask.getId()); //добавление идентификатора в список подзадач эпика
-        updateEpicStatus(storageEpic.get(subtask.getEpicId()));   //обновление статуса эпика
+        super.createSubtask(subtask);
+        save();
     }
 
     @Override
     public void updateSubtask(Subtask subtask) { // обновление подзадачи
-
-        storageSubtask.put(subtask.getId(), subtask);
-        updateEpicStatus(storageEpic.get(subtask.getEpicId())); //обновление статуса эпика
+        super.updateSubtask(subtask);
+        save();
     }
 
     @Override
@@ -224,26 +208,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
 
     protected void updateEpicStatus(Epic epic) {
-        //updateEpicStatus
-        boolean checkStatusNEW = true;
-        boolean checkStatusDONE = true;
-        if (!epic.getSubtasksId().isEmpty()) {
-            for (Integer iterator : epic.getSubtasksId()) {
-                if (!Objects.equals(storageSubtask.get(iterator).getStatus(), StatusTask.NEW)) {
-                    checkStatusNEW = false;
-                }
-                if (!Objects.equals(storageSubtask.get(iterator).getStatus(), StatusTask.DONE)) {
-                    checkStatusDONE = false;
-                }
-            }
-        }
-        if (checkStatusNEW) {
-            epic.setStatus(StatusTask.NEW);
-        } else if (checkStatusDONE) {
-            epic.setStatus(StatusTask.DONE);
-        } else {
-            epic.setStatus(StatusTask.IN_PROGRESS);
-        }
+        super.updateEpicStatus(epic);
+        save();
     }
 
     @Override
