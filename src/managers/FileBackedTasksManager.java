@@ -5,28 +5,46 @@ import tasks.StatusTask;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+import errors.ManagerSaveException
+
 public class FileBackedTasksManager extends InMemoryTaskManager{
 
+    //change bug
 
 
     public FileBackedTasksManager() {
 
     }
 
+
     public void save() {
         try () {
 
-        } catch (IOException e) {
-
+        } catch (ManagerSaveException e) {
+            System.out.println(e.getMessage());
         }
     }
 
 
+    //rewriting methods
+
+    static String historyToString(HistoryManager) {
+        return null;
+    }
+
+    static void loadFromFile(File file) {
+
+    }
+
+
+    //methods wich i must change
     private String toString(Task task) {
         return null;
     }
@@ -188,13 +206,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public void deleteSubtaskById(Integer id) {
-
-        Integer epicId = storageSubtask.get(id).getEpicId();
-
-        storageEpic.get(epicId).deleteId(id);
-        storageSubtask.remove(id);
-        updateEpicStatus(storageEpic.get(epicId));
-        historyManager.remove(id);
+        super.deleteSubtaskById(id);
+        save();
     }
 
 
