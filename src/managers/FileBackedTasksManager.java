@@ -32,6 +32,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     public void save() {
         try (FileWriter writer = new FileWriter(value, StandardCharsets.UTF_8)) {
+
+            for(Map.Entry<Integer, Task> task :super.storageTask.entrySet()) {
+                writer.write(toString(task.getValue()));
+            }
+
+            for(Map.Entry<Integer, Epic> task :super.storageEpic.entrySet()) {
+                writer.write(toString(task.getValue()));
+            }
+
+            for(Map.Entry<Integer, Subtask> task :super.storageSubtask.entrySet()) {
+                writer.write(toString(task.getValue()));
+            }
+
+
+
+
+                writer.write("\n");
                 writer.write(historyToString(historyManager));
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -45,14 +62,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
       String className = task.getClass().getSimpleName();
         switch (className) {
             case "Task":
-                return String.join(",", Integer.toString(task.getId()),TypeTask.TASK,task.getName(),task.getDescription(), ",");
-                break;
+                return String.join(",", Integer.toString(task.getId()),"TypeTask.TASK",task.getName(),task.getDescription(), ",");
             case "Epic":
-                return String.join(",",Integer.toString(task.getId()),TypeTask.EPIC,task.getName(),task.getDescription(), ",");
-            break;
+                return String.join(",",Integer.toString(task.getId()),"TypeTask.EPIC",task.getName(),task.getDescription(), ",");
             case "Subtask":
-                return String.join(",",Integer.toString(task.getId()),TypeTask.SUBTASK,task.getName(),task.getDescription(), task.getSubtasksId());
-            break;
+                Subtask tempSubtask = (Subtask) task;
+                return String.join(",",Integer.toString(tempSubtask.getId()),"TypeTask.SUBTASK",tempSubtask.getName(),tempSubtask.getDescription(), Integer.toString(tempSubtask.getEpicId()));
+
             default:
                 return "qwert";
         }

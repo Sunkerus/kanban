@@ -96,6 +96,17 @@ public class Main {
         System.out.println("Получим получим кол - во элементов в истории: " + manager.getHistory().size());
         System.out.println("=====================================================================\n");
 
+        FileBackedTasksManager fileTaskManager = new FileBackedTasksManager();
+
+
+        Task task3 = new Task("qwe","qwe");
+        fileTaskManager.createTask(task3);
+        fileTaskManager.save();
+        Epic epic3 = new Epic("eqwe","qweqw");
+        fileTaskManager.createEpic(epic3);
+
+
+
         System.out.println("\nПроверим оставшиеся задачи");
         System.out.println("=====================================================================\n");
         System.out.println(manager.getAllEpic());
@@ -103,8 +114,7 @@ public class Main {
         System.out.println(manager.getAllTask());
 
 
-        FileBackedTasksManager qwe = new FileBackedTasksManager();
-        qwe.save();
+
     }
 
 }
