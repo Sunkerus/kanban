@@ -6,11 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-
-import java.nio.file.Path;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,15 +17,14 @@ import errors.ManagerSaveException;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    String filePath;
+    File file;
 
-
-    public FileBackedTasksManager(String path) {
-        filePath = path;
+    public FileBackedTasksManager(File file) {
+        this.file = file;
     }
 
-    public void save() {
-        try (FileWriter writer = new FileWriter(filePath, StandardCharsets.UTF_8)) {
+    public void save(){
+        try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
 
             writer.write("id,type,name,status,description,epic" + System.lineSeparator());
 
@@ -53,7 +48,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-
+    static FileBackedTasksManager loadFromFile(File file) {
+        return null;
+    }
+    //for write
     public String toString(Task task) {
         String className = task.getClass().getSimpleName();
         switch (className) {
@@ -78,7 +76,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return String.join(",", returnStr);
     }
 
-    //метод создания задачи из строки
+    //for read
     private Task fromString(String value) {
         String[] tempStr = value.split(",");
 
@@ -86,17 +84,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             case "TASK":
                 Task tempTask = new Task(tempStr[2], tempStr[4]);
                 tempTask.setId((Integer.parseInt(tempStr[0])));
-                tempTask.setStatus(StatusTask.valueOf(tempStr[3])); //?
+                tempTask.setStatus(StatusTask.valueOf(tempStr[3]));
                 return tempTask;
             case "EPIC":
                 Task tempEpic = new Epic(tempStr[2], tempStr[4]);
                 tempEpic.setId((Integer.parseInt(tempStr[0])));
-                tempEpic.setStatus(StatusTask.valueOf(tempStr[3])); //?
+                tempEpic.setStatus(StatusTask.valueOf(tempStr[3]));
                 return tempEpic;
             case "SUBTASK":
                 Subtask tempSubtask = new Subtask(tempStr[2], tempStr[4]);
                 tempSubtask.setId((Integer.parseInt(tempStr[0])));
-                tempSubtask.setStatus(StatusTask.valueOf(tempStr[3])); //?
+                tempSubtask.setStatus(StatusTask.valueOf(tempStr[3]));
                 tempSubtask.setEpicId(Integer.parseInt(tempStr[5]));
                 return tempSubtask;
         }

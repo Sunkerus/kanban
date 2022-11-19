@@ -1,6 +1,9 @@
 import managers.*;
 import tasks.*;
 
+import java.io.File;
+import java.nio.file.Path;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -96,7 +99,10 @@ public class Main {
         System.out.println("Получим получим кол - во элементов в истории: " + manager.getHistory().size());
         System.out.println("=====================================================================\n");
 
-        TaskManager fileTaskManager = Managers.getFileBackedTaskManager(".\\Resources\\saveConfig.csv");
+
+        File saveFilePath = new File(".\\Resources\\saveConfig.csv");
+
+        TaskManager fileTaskManager = Managers.getFileBackedTaskManager(saveFilePath);
 
         Epic epic3 = new Epic("name", "description");
         fileTaskManager.createEpic(epic3);
