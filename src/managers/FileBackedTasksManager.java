@@ -2,13 +2,12 @@ package managers;
 
 import tasks.*;
 
-import java.io.*;
-import java.nio.Buffer;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -16,13 +15,13 @@ import errors.ManagerSaveException;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    File file;
+    private final File file;
 
     public FileBackedTasksManager(File file) {
         this.file = file;
     }
 
-    public void save(){
+    public void save() throws ManagerSaveException {
         try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
 
             writer.write("id,type,name,status,description,epic" + System.lineSeparator());
@@ -43,11 +42,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
             writer.write(historyToString(super.historyManager));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            throw new ManagerSaveException(e.getMessage());
         }
     }
 
-    public static FileBackedTasksManager loadFromFile(File file) throws FileNotFoundException, NullPointerException {
+    public static FileBackedTasksManager loadFromFile(File file) throws NullPointerException, ManagerSaveException {
         FileBackedTasksManager tempFileManager = new FileBackedTasksManager(file);
         try (FileReader reader = new FileReader(file); BufferedReader br = new BufferedReader(reader);) {
             br.readLine();
@@ -69,11 +68,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     }
                 } else {
                     line = br.readLine();
-                   List<Integer> tempHistoryList =  historyFromString(line);
-                    for (Integer tempId: tempHistoryList) {
+                    List<Integer> tempHistoryList = historyFromString(line);
+                    for (Integer tempId : tempHistoryList) {
                         if (tempFileManager.storageTask.containsKey(tempId)) {
-                           tempFileManager.getTaskById(tempId);
-                        }else if (tempFileManager.storageEpic.containsKey(tempId)) {
+                            tempFileManager.getTaskById(tempId);
+                        } else if (tempFileManager.storageEpic.containsKey(tempId)) {
                             tempFileManager.getEpicById(tempId);
                         } else if (tempFileManager.storageSubtask.containsKey(tempId)) {
                             tempFileManager.getSubtaskById(tempId);
@@ -82,13 +81,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
                 }
             }
-        } catch(IOException  e){
-            System.out.println("Произошла ошибка во время чтения файла.");
+        } catch (IOException | NullPointerException e) {
+            throw new ManagerSaveException(e.getMessage());
         }
         return tempFileManager;
     }
 
-        //for write
+    //for write
     private String toString(Task task) {
         String className = task.getClass().getSimpleName();
         switch (className) {
