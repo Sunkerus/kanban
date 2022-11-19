@@ -103,6 +103,8 @@ public class Main {
         System.out.println(manager.getAllTask());
 
 
+        FileBackedTasksManager qwe = new FileBackedTasksManager();
+        qwe.save();
     }
 
 }

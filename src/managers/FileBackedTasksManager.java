@@ -1,68 +1,106 @@
 package managers;
 
-import tasks.Epic;
-import tasks.StatusTask;
-import tasks.Subtask;
-import tasks.Task;
+import tasks.*;
 
-import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
-import errors.ManagerSaveException
+import java.nio.file.Path;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+import errors.ManagerSaveException;
 
 public class FileBackedTasksManager extends InMemoryTaskManager{
 
-    //change bug
+    Path filePath;
+    String value = "Resources\\saveConfig.csv";
 
+    private File saveFile;
 
     public FileBackedTasksManager() {
-
+        filePath = Paths.get(value);
     }
 
-
     public void save() {
-        try () {
-
-        } catch (ManagerSaveException e) {
+        try (FileWriter writer = new FileWriter(value, StandardCharsets.UTF_8)) {
+                writer.write(historyToString(historyManager));
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
 
 
-    //rewriting methods
+    //метод для сохранения задач в строчку
 
-    static String historyToString(HistoryManager) {
+    public String toString(Task task) {
+      String className = task.getClass().getSimpleName();
+        switch (className) {
+            case "Task":
+                return String.join(",", Integer.toString(task.getId()),TypeTask.TASK,task.getName(),task.getDescription(), ",");
+                break;
+            case "Epic":
+                return String.join(",",Integer.toString(task.getId()),TypeTask.EPIC,task.getName(),task.getDescription(), ",");
+            break;
+            case "Subtask":
+                return String.join(",",Integer.toString(task.getId()),TypeTask.SUBTASK,task.getName(),task.getDescription(), task.getSubtasksId());
+            break;
+            default:
+                return "qwert";
+        }
+    }
+
+    //метод создания задачи из строки
+    private Task fromString(String value) {
+        String[] tempStr = value.split(",");
+
+        switch (tempStr[1]) {
+            case "TASK":
+                Task tempTask = new Task(tempStr[2], tempStr[4]);
+                tempTask.setId((Integer.parseInt(tempStr[0])));
+                tempTask.setStatus(StatusTask.valueOf(tempStr[3])); //?
+                return tempTask;
+            case "EPIC":
+                Task tempEpic = new Epic(tempStr[2], tempStr[4]);
+                tempEpic.setId((Integer.parseInt(tempStr[0])));
+                tempEpic.setStatus(StatusTask.valueOf(tempStr[3])); //?
+                return tempEpic;
+            case "SUBTASK":
+                Subtask tempSubtask = new Subtask(tempStr[2], tempStr[4]);
+                tempSubtask.setId((Integer.parseInt(tempStr[0])));
+                tempSubtask.setStatus(StatusTask.valueOf(tempStr[3])); //?
+                tempSubtask.setEpicId(Integer.parseInt(tempStr[5]));
+                return tempSubtask;
+        }
         return null;
     }
 
-    static void loadFromFile(File file) {
+    //сохранение истории
+    private static String historyToString(HistoryManager manager) {
+        StringBuilder returnStr = new StringBuilder(100);;
+        for (Task historyId: manager.getHistory()) {
+            returnStr.append(historyId.getId());
+        }
+        return  returnStr.toString();
 
     }
 
-
-    //methods wich i must change
-    private String toString(Task task) {
-        return null;
-    }
-
-    private Task fromString (String value) {
-        return null;
-    }
-
-    static String historyToString(HistoryManager manager){
-        return null;
+    private static List<Integer> historyFromString(String value) {
+        return Arrays.stream( value.split(","))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
     }
 
 
-    static List<Integer> historyFromString(String value) {
-        return null;
-
-        try(Files.readString(Path.of("/resources/saveConfig.csv")));
-    }
+    //logic of in memory task manager
 
 
     private final HashMap<Integer, Task> storageTask = new HashMap<>();
@@ -71,11 +109,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
+
+    @Override
+    public int generateId() {
+        return super.generateId();
+    }
+
+    //методы для задач
+
     @Override
     public ArrayList<Task> getAllTask() { //получение списка задач
-        save();
         return super.getAllTask();
-
     }
 
     @Override
@@ -83,12 +127,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
         super.removeAllTask();
         save();
 
-
     }
 
     @Override
     public Task getTaskById(int id) { //получение по id
-        save();
         return super.getTaskById(id);
     }
 
@@ -106,7 +148,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public void deleteTaskById(int id) { // проверить на возможные исключения throwable
-        deleteTaskById(id);
+        super.deleteTaskById(id);
         save();
     }
 
@@ -115,9 +157,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public ArrayList<Epic> getAllEpic() { //получение списка эпиков
-
-        Collection<Epic> values = storageEpic.values();
-        return new ArrayList<>(values);
+        return super.getAllEpic();
     }
 
     @Override
@@ -128,10 +168,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public Epic getEpicById(int id) { //получение по id
-
-        Epic storageEpicTemp = storageEpic.get(id);
-        historyManager.add(storageEpicTemp);
-        return storageEpicTemp;
+        return super.getEpicById(id);
     }
 
     @Override
@@ -142,7 +179,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public void updateEpic(Epic epic) { // обновление эпика
-        super.updateEpic();
+        super.updateEpic(epic);
         save();
     }
 
@@ -157,8 +194,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public ArrayList<Subtask> getAllSubtask() { //получение списка подзадач
-        Collection<Subtask> values = storageSubtask.values();
-        return new ArrayList<>(values);
+        return super.getAllSubtask();
     }
 
 
@@ -170,10 +206,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public Subtask getSubtaskById(int id) { //получение по id субтасков
-
-        Subtask storageSubtaskTemp = storageSubtask.get(id);
-        historyManager.add(storageSubtaskTemp);
-        return storageSubtaskTemp;
+        return super.getSubtaskById(id);
     }
 
     @Override

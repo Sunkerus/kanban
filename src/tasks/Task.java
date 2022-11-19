@@ -55,6 +55,4 @@ public class Task {
                 "description = " + description + ", " +
                 "statusTask = " + status;
     }
-
-
 }
