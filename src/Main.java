@@ -98,13 +98,16 @@ public class Main {
 
         TaskManager fileTaskManager = Managers.getFileBackedTaskManager(".\\Resources\\saveConfig.csv");
 
-        Epic epic3 = new Epic("eqwe","qweqw");
+        Epic epic3 = new Epic("name", "description");
         fileTaskManager.createEpic(epic3);
-        Task task3 = new Task("qwe","qwe");
+        Task task3 = new Task("name", "description");
         fileTaskManager.createTask(task3);
         fileTaskManager.getEpicById(1);
         fileTaskManager.getTaskById(2);
-
+        Subtask subtask3_1 = new Subtask("name", "description");
+        subtask3_1.setEpicId(1);
+        fileTaskManager.createSubtask(subtask3_1);
+        fileTaskManager.getSubtaskById(3);
 
 
         System.out.println("\nПроверим оставшиеся задачи");

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import errors.ManagerSaveException;
 
-public class FileBackedTasksManager extends InMemoryTaskManager{
+public class FileBackedTasksManager extends InMemoryTaskManager {
 
     String filePath;
 
@@ -31,15 +31,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
     public void save() {
         try (FileWriter writer = new FileWriter(filePath, StandardCharsets.UTF_8)) {
 
-            for(Map.Entry<Integer, Task> task :super.storageTask.entrySet()) {
+            writer.write("id,type,name,status,description,epic" + System.lineSeparator());
+
+            for (Map.Entry<Integer, Task> task : super.storageTask.entrySet()) {
                 writer.write(toString(task.getValue()) + System.lineSeparator());
             }
 
-            for(Map.Entry<Integer, Epic> task :super.storageEpic.entrySet()) {
+            for (Map.Entry<Integer, Epic> task : super.storageEpic.entrySet()) {
                 writer.write(toString(task.getValue()) + System.lineSeparator());
             }
 
-            for(Map.Entry<Integer, Subtask> task :super.storageSubtask.entrySet()) {
+            for (Map.Entry<Integer, Subtask> task : super.storageSubtask.entrySet()) {
                 writer.write(toString(task.getValue()) + System.lineSeparator());
             }
 
@@ -52,22 +54,28 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
     }
 
 
-    //метод для сохранения задач в строчку
-
     public String toString(Task task) {
-      String className = task.getClass().getSimpleName();
+        String className = task.getClass().getSimpleName();
         switch (className) {
             case "Task":
-                return String.join(",", Integer.toString(task.getId()),"TypeTask.TASK",task.getName(),task.getDescription(), ",");
+                return String.join(",", Integer.toString(task.getId()), TypeTask.TASK.name(), task.getName(), task.getStatus().name(), task.getDescription(), "");
             case "Epic":
-                return String.join(",",Integer.toString(task.getId()),"TypeTask.EPIC",task.getName(),task.getDescription(), ",");
+                return String.join(",", Integer.toString(task.getId()), TypeTask.EPIC.name(), task.getName(), task.getStatus().name(), task.getDescription(), "");
             case "Subtask":
                 Subtask tempSubtask = (Subtask) task;
-                return String.join(",",Integer.toString(tempSubtask.getId()),"TypeTask.SUBTASK",tempSubtask.getName(),tempSubtask.getDescription(), Integer.toString(tempSubtask.getEpicId()));
+                return String.join(",", Integer.toString(tempSubtask.getId()), TypeTask.SUBTASK.name(), tempSubtask.getName(), task.getStatus().name(), tempSubtask.getDescription(), Integer.toString(tempSubtask.getEpicId()));
 
             default:
-                return "qwert";
+                return null;
         }
+    }
+
+    private static String historyToString(HistoryManager manager) {
+        ArrayList<String> returnStr = new ArrayList<>();
+        for (Task historyId : manager.getHistory()) {
+            returnStr.add(Integer.toString(historyId.getId()));
+        }
+        return String.join(",", returnStr);
     }
 
     //метод создания задачи из строки
@@ -95,35 +103,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
         return null;
     }
 
-    //сохранение истории
-    private static String historyToString(HistoryManager manager) {
-        ArrayList<String> returnStr = new ArrayList<>();
-        for (Task historyId: manager.getHistory()) {
-            returnStr.add(Integer.toString(historyId.getId()));
-        }
-        return  String.join(",",returnStr);
-
-    }
-
     private static List<Integer> historyFromString(String value) {
-        return Arrays.stream( value.split(","))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+        return Arrays.stream(value.split(",")).map(Integer::parseInt).collect(Collectors.toList());
     }
 
 
-
-
+    //методы с наследованием
     @Override
     public int generateId() {
         return super.generateId();
-    }
-
-    //методы для задач
-
-    @Override
-    public ArrayList<Task> getAllTask() { //получение списка задач
-        return super.getAllTask();
     }
 
     @Override
@@ -158,14 +146,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
         save();
     }
 
-
-    //методы для эпиков
-
-    @Override
-    public ArrayList<Epic> getAllEpic() { //получение списка эпиков
-        return super.getAllEpic();
-    }
-
     @Override
     public void removeAllEpic() { //удаление всех эпиков
         super.removeAllEpic();
@@ -197,36 +177,27 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
         save();
     }
 
-
-    //методя для подзадач
-
     @Override
-    public ArrayList<Subtask> getAllSubtask() { //получение списка подзадач
-        return super.getAllSubtask();
-    }
-
-
-    @Override
-    public void removeAllSubtask() { //удаление всех субтасков
+    public void removeAllSubtask() {
         super.removeAllSubtask();
         save();
     }
 
     @Override
-    public Subtask getSubtaskById(int id) { //получение по id субтасков
+    public Subtask getSubtaskById(int id) {
         Subtask tempSubtask = super.getSubtaskById(id);
         save();
         return tempSubtask;
     }
 
     @Override
-    public void createSubtask(Subtask subtask) { // создание сабтаска(объект передаётся в качестве параметра)
+    public void createSubtask(Subtask subtask) {
         super.createSubtask(subtask);
         save();
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) { // обновление подзадачи
+    public void updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
         save();
     }
@@ -237,24 +208,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
         save();
     }
 
-
-//additional methods
-
-    @Override
-    public ArrayList<Subtask> getListSubtaskOfEpic(Integer id) {
-       return super.getListSubtaskOfEpic(id);
-    }
-
-
     protected void updateEpicStatus(Epic epic) {
         super.updateEpicStatus(epic);
         save();
     }
-
-
-
-
-
 
 
 }
