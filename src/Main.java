@@ -96,14 +96,14 @@ public class Main {
         System.out.println("Получим получим кол - во элементов в истории: " + manager.getHistory().size());
         System.out.println("=====================================================================\n");
 
-        FileBackedTasksManager fileTaskManager = new FileBackedTasksManager();
+        TaskManager fileTaskManager = Managers.getFileBackedTaskManager(".\\Resources\\saveConfig.csv");
 
-
-        Task task3 = new Task("qwe","qwe");
-        fileTaskManager.createTask(task3);
-        fileTaskManager.save();
         Epic epic3 = new Epic("eqwe","qweqw");
         fileTaskManager.createEpic(epic3);
+        Task task3 = new Task("qwe","qwe");
+        fileTaskManager.createTask(task3);
+        fileTaskManager.getEpicById(1);
+        fileTaskManager.getTaskById(2);
 
 
 
@@ -112,7 +112,6 @@ public class Main {
         System.out.println(manager.getAllEpic());
         System.out.println(manager.getAllSubtask());
         System.out.println(manager.getAllTask());
-
 
 
     }

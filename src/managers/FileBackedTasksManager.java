@@ -21,35 +21,31 @@ import errors.ManagerSaveException;
 
 public class FileBackedTasksManager extends InMemoryTaskManager{
 
-    Path filePath;
-    String value = "Resources\\saveConfig.csv";
+    String filePath;
 
-    private File saveFile;
 
-    public FileBackedTasksManager() {
-        filePath = Paths.get(value);
+    public FileBackedTasksManager(String path) {
+        filePath = path;
     }
 
     public void save() {
-        try (FileWriter writer = new FileWriter(value, StandardCharsets.UTF_8)) {
+        try (FileWriter writer = new FileWriter(filePath, StandardCharsets.UTF_8)) {
 
             for(Map.Entry<Integer, Task> task :super.storageTask.entrySet()) {
-                writer.write(toString(task.getValue()));
+                writer.write(toString(task.getValue()) + System.lineSeparator());
             }
 
             for(Map.Entry<Integer, Epic> task :super.storageEpic.entrySet()) {
-                writer.write(toString(task.getValue()));
+                writer.write(toString(task.getValue()) + System.lineSeparator());
             }
 
             for(Map.Entry<Integer, Subtask> task :super.storageSubtask.entrySet()) {
-                writer.write(toString(task.getValue()));
+                writer.write(toString(task.getValue()) + System.lineSeparator());
             }
 
+            writer.write(System.lineSeparator());
 
-
-
-                writer.write("\n");
-                writer.write(historyToString(historyManager));
+            writer.write(historyToString(super.historyManager));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -101,11 +97,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     //сохранение истории
     private static String historyToString(HistoryManager manager) {
-        StringBuilder returnStr = new StringBuilder(100);;
+        ArrayList<String> returnStr = new ArrayList<>();
         for (Task historyId: manager.getHistory()) {
-            returnStr.append(historyId.getId());
+            returnStr.add(Integer.toString(historyId.getId()));
         }
-        return  returnStr.toString();
+        return  String.join(",",returnStr);
 
     }
 
@@ -116,14 +112,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
     }
 
 
-    //logic of in memory task manager
-
-
-    private final HashMap<Integer, Task> storageTask = new HashMap<>();
-    private final HashMap<Integer, Epic> storageEpic = new HashMap<>();
-    private final HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
-
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
 
 
     @Override
@@ -147,7 +135,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public Task getTaskById(int id) { //получение по id
-        return super.getTaskById(id);
+        Task tempTask = super.getTaskById(id);
+        save();
+        return tempTask;
     }
 
     @Override
@@ -184,13 +174,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public Epic getEpicById(int id) { //получение по id
-        return super.getEpicById(id);
+        Epic tempEpic = super.getEpicById(id);
+        save();
+        return tempEpic;
     }
 
     @Override
     public void createEpic(Epic epic) { // создание эпика(объект передаётся в качестве параметра)
-            super.createEpic(epic);
-            save();
+        super.createEpic(epic);
+        save();
     }
 
     @Override
@@ -222,7 +214,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public Subtask getSubtaskById(int id) { //получение по id субтасков
-        return super.getSubtaskById(id);
+        Subtask tempSubtask = super.getSubtaskById(id);
+        save();
+        return tempSubtask;
     }
 
     @Override
@@ -248,11 +242,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
 
     @Override
     public ArrayList<Subtask> getListSubtaskOfEpic(Integer id) {
-        ArrayList<Subtask> tempArrSubtask = new ArrayList<>();
-        for (Integer iterator : storageEpic.get(id).getSubtasksId()) {
-            tempArrSubtask.add(storageSubtask.get(iterator));
-        }
-        return tempArrSubtask;
+       return super.getListSubtaskOfEpic(id);
     }
 
 
@@ -261,10 +251,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
         save();
     }
 
-    @Override
-    public List<Task> getHistory(){
-        return historyManager.getHistory();
-    }
 
 
 
