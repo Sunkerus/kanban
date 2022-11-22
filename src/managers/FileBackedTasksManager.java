@@ -265,6 +265,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileTaskManager.createSubtask(subtask3_1);
         fileTaskManager.getSubtaskById(3);
 
+        fileTaskManager.getTaskById(2).setStatus(StatusTask.IN_PROGRESS);
+        System.out.println(fileTaskManager.getTaskById(2));
 
         System.out.println(fileTaskManager.getAllEpic());
         System.out.println(fileTaskManager.getAllSubtask());
