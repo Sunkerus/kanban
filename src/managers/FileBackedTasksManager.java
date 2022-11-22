@@ -2,14 +2,12 @@ package managers;
 
 import tasks.*;
 
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 import errors.ManagerSaveException;
 
@@ -21,7 +19,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public void save() throws ManagerSaveException {
+    public void save() throws ManagerSaveException, NullPointerException{
         try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
 
             writer.write("id,type,name,status,description,epic" + System.lineSeparator());
@@ -41,7 +39,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             writer.write(System.lineSeparator());
 
             writer.write(historyToString(super.historyManager));
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             throw new ManagerSaveException(e.getMessage());
         }
     }
@@ -65,6 +63,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                         case "Subtask":
                             tempFileManager.storageSubtask.put(tempTask.getId(), (Subtask) tempTask);
                             break;
+                        default:
+                            throw new ManagerSaveException("Информация о задачах не найдена в файле");
                     }
                 } else {
                     line = br.readLine();
@@ -78,8 +78,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                             tempFileManager.getSubtaskById(tempId);
                         }
                     }
-
                 }
+            }
+            if (tempFileManager.storageTask.isEmpty() && tempFileManager.storageEpic.isEmpty() && tempFileManager.storageSubtask.isEmpty()) {
+                throw new ManagerSaveException("Задачи в файле не найдены");
             }
         } catch (IOException | NullPointerException e) {
             throw new ManagerSaveException(e.getMessage());
@@ -88,7 +90,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     //for write
-    private String toString(Task task) {
+    private String toString(Task task) throws ManagerSaveException {
         String className = task.getClass().getSimpleName();
         switch (className) {
             case "Task":
@@ -98,9 +100,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             case "Subtask":
                 Subtask tempSubtask = (Subtask) task;
                 return String.join(",", Integer.toString(tempSubtask.getId()), TypeTask.SUBTASK.name(), tempSubtask.getName(), task.getStatus().name(), tempSubtask.getDescription(), Integer.toString(tempSubtask.getEpicId()));
-
             default:
-                return null;
+                throw new ManagerSaveException("Ошибка преобразование в строку");
         }
     }
 
@@ -115,25 +116,26 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     //for read
     private Task fromString(String value) {
         String[] tempStr = value.split(",");
-
-        switch (tempStr[1]) {
-            case "TASK":
-                Task tempTask = new Task(tempStr[2], tempStr[4]);
-                tempTask.setId((Integer.parseInt(tempStr[0])));
-                tempTask.setStatus(StatusTask.valueOf(tempStr[3]));
-                return tempTask;
-            case "EPIC":
-                Epic tempEpic = new Epic(tempStr[2], tempStr[4]);
-                tempEpic.setId((Integer.parseInt(tempStr[0])));
-                tempEpic.setStatus(StatusTask.valueOf(tempStr[3]));
-                return tempEpic;
-            case "SUBTASK":
-                Subtask tempSubtask = new Subtask(tempStr[2], tempStr[4]);
-                tempSubtask.setId(Integer.parseInt(tempStr[0]));
-                tempSubtask.setStatus(StatusTask.valueOf(tempStr[3]));
-                tempSubtask.setEpicId(Integer.parseInt(tempStr[5]));
-                super.storageEpic.get(Integer.parseInt(tempStr[5])).setSubtasksId(Integer.parseInt(tempStr[0]));
-                return tempSubtask;
+        if ((tempStr.length == 5) || (tempStr.length == 6)) {
+            switch (tempStr[1]) {
+                case "TASK":
+                    Task tempTask = new Task(tempStr[2], tempStr[4]);
+                    tempTask.setId((Integer.parseInt(tempStr[0])));
+                    tempTask.setStatus(StatusTask.valueOf(tempStr[3]));
+                    return tempTask;
+                case "EPIC":
+                    Epic tempEpic = new Epic(tempStr[2], tempStr[4]);
+                    tempEpic.setId((Integer.parseInt(tempStr[0])));
+                    tempEpic.setStatus(StatusTask.valueOf(tempStr[3]));
+                    return tempEpic;
+                case "SUBTASK":
+                    Subtask tempSubtask = new Subtask(tempStr[2], tempStr[4]);
+                    tempSubtask.setId(Integer.parseInt(tempStr[0]));
+                    tempSubtask.setStatus(StatusTask.valueOf(tempStr[3]));
+                    tempSubtask.setEpicId(Integer.parseInt(tempStr[5]));
+                    super.storageEpic.get(Integer.parseInt(tempStr[5])).setSubtasksId(Integer.parseInt(tempStr[0]));
+                    return tempSubtask;
+            }
         }
         return null;
     }
@@ -144,11 +146,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
 
     //методы с наследованием
-    @Override
-    public int generateId() {
-        return super.generateId();
-    }
-
     @Override
     public void removeAllTask() { //удаление всех задач
         super.removeAllTask();
@@ -248,5 +245,45 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
+    public static void main(String[] args) {
+
+        File saveFilePath = new File(".\\Resources\\saveConfig.csv");
+
+        System.out.println("\nЗагрузка в файл saveConfig.csv");
+        System.out.println("=====================================================================");
+
+        TaskManager fileTaskManager = Managers.getDefault(saveFilePath);
+
+        Epic epic3 = new Epic("name", "description");
+        fileTaskManager.createEpic(epic3);
+        Task task3 = new Task("name", "description");
+        fileTaskManager.createTask(task3);
+        fileTaskManager.getEpicById(1);
+        fileTaskManager.getTaskById(2);
+        Subtask subtask3_1 = new Subtask("name", "description");
+        subtask3_1.setEpicId(1);
+        fileTaskManager.createSubtask(subtask3_1);
+        fileTaskManager.getSubtaskById(3);
+
+
+        System.out.println(fileTaskManager.getAllEpic());
+        System.out.println(fileTaskManager.getAllSubtask());
+        System.out.println(fileTaskManager.getAllTask());
+        System.out.println("====================История====================");
+        System.out.println(fileTaskManager.getHistory());
+
+
+        File loadFilePath = new File(".\\Resources\\saveConfig.csv");
+
+        System.out.println("\nСчитывание из файла saveConfig.csv");
+        System.out.println("=====================================================================");
+        TaskManager fileTaskManager1 = FileBackedTasksManager.loadFromFile(loadFilePath);
+        System.out.println(fileTaskManager1.getAllEpic());
+        System.out.println(fileTaskManager1.getAllSubtask());
+        System.out.println(fileTaskManager1.getAllTask());
+        System.out.println("====================История====================");
+        System.out.println(fileTaskManager1.getHistory());
+
+    }
 
 }
