@@ -182,7 +182,6 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     protected void updateEpicStatus(Epic epic) {
-        //updateEpicStatus
         boolean checkStatusNEW = true;
         boolean checkStatusDONE = true;
         if (!epic.getSubtasksId().isEmpty()) {
