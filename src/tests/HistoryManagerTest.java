@@ -32,7 +32,6 @@ class HistoryManagerTest {
         historyManager = Managers.getDefaultHistory();
 
         epic1 = new Epic("name", "description");
-
         task2 = new Task("name", "description");
         task3 = new Task("name","description");
         subtask4 = new Subtask("name","description");

@@ -1,14 +1,15 @@
 package tests;
 
+import managers.*;
 import org.junit.jupiter.api.Test;
+import managers.InMemoryTaskManager;
 
-class InMemoryTasksManagerTest {
+public class InMemoryTasksManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
 
-    @Test
-    public void someTest() {
-
+    public InMemoryTasksManagerTest() {
+        super(new InMemoryTaskManager());
     }
-
+    private final TaskManager tasksManager = super.getTasksManager();
 
 }
