@@ -58,7 +58,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private void removeNode(Node<Task> node) {
 
         if (node != null) {
-            if (node.prev == null && node.next == null) { //удалене последней ноды
+            if (node.prev == null && node.next == null) { //удаление последней ноды
                 head = null;
                 tail = null;
                 size--;
