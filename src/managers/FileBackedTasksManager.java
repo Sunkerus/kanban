@@ -19,7 +19,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public void save() throws ManagerSaveException, NullPointerException{
+    public void save() throws ManagerSaveException {
         try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
 
             writer.write("id,type,name,status,description,epic" + System.lineSeparator());
@@ -44,7 +44,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    public static FileBackedTasksManager loadFromFile(File file) throws NullPointerException, ManagerSaveException {
+    public static FileBackedTasksManager loadFromFile(File file) throws ManagerSaveException {
         FileBackedTasksManager tempFileManager = new FileBackedTasksManager(file);
         try (FileReader reader = new FileReader(file); BufferedReader br = new BufferedReader(reader);) {
             br.readLine();
@@ -246,7 +246,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public static void main(String[] args) {
-
+        /*
         File saveFilePath = new File(".\\Resources\\saveConfig.csv");
 
         System.out.println("\nЗагрузка в файл saveConfig.csv");
@@ -274,6 +274,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileTaskManager.getTaskById(2).setStatus(StatusTask.IN_PROGRESS);
         System.out.println("\nИзменим статус задачи");
         System.out.println(fileTaskManager.getTaskById(2));
+
+         */
 
         File loadFilePath = new File(".\\Resources\\saveConfig.csv");
 
