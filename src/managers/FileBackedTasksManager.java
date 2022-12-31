@@ -140,8 +140,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return null;
     }
 
-    private static List<Integer> historyFromString(String value) {
-        return Arrays.stream(value.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+    private static List<Integer> historyFromString(String value) throws ManagerSaveException{
+        try {
+            return Arrays.stream(value.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        }catch(NullPointerException e){
+            throw new ManagerSaveException("Не удаётся прочитать строчку в файле");
+        }
     }
 
 
@@ -246,7 +250,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public static void main(String[] args) {
-        /*
+
         File saveFilePath = new File(".\\Resources\\saveConfig.csv");
 
         System.out.println("\nЗагрузка в файл saveConfig.csv");
@@ -275,7 +279,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println("\nИзменим статус задачи");
         System.out.println(fileTaskManager.getTaskById(2));
 
-         */
+
 
         File loadFilePath = new File(".\\Resources\\saveConfig.csv");
 

@@ -8,8 +8,8 @@ public class InMemoryTasksManagerTest extends TaskManagerTest<InMemoryTaskManage
 
 
     public InMemoryTasksManagerTest() {
-        super(new InMemoryTaskManager());
+        super((InMemoryTaskManager) Managers.getInMemoryTaskManager());
     }
-    private final TaskManager tasksManager = super.getTasksManager();
 
+    //все тесты, для методов, использованных в InMemoryTaskManager, написаны в TaskManager Test
 }
