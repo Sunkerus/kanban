@@ -1,6 +1,7 @@
 package managers;
 
 import java.rmi.UnexpectedException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import errors.ManagerSaveException;
@@ -8,6 +9,7 @@ import tasks.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
+    Set<Task> prTask;
     private int generateId = 0;
 
     protected final HashMap<Integer, Task> storageTask = new HashMap<>();
@@ -40,7 +42,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskById(int id) throws NullPointerException { //получение по id
+    public Task getTaskById(int id) throws ManagerSaveException { //получение по id
         try {
             Task storageTaskTemp = storageTask.get(id);
             historyManager.add(storageTaskTemp);
@@ -65,8 +67,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskById(int id) {
-        storageTask.remove(id);
-        historyManager.remove(id);
+            storageTask.remove(id);
+            historyManager.remove(id);
     }
 
 
@@ -86,7 +88,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getEpicById(int id) throws NullPointerException{ //получение по id
+    public Epic getEpicById(int id) throws ManagerSaveException{ //получение по id
     try{
         Epic storageEpicTemp = storageEpic.get(id);
         historyManager.add(storageEpicTemp);
@@ -109,16 +111,20 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteEpicById(int id) {
-        //копируем массив
-        ArrayList<Integer> tempSubtaskIdArr = new ArrayList<>(storageEpic.get(id).getSubtasksId());
+    public void deleteEpicById(int id) throws ManagerSaveException{
+        try {
+            //копируем массив
+            ArrayList<Integer> tempSubtaskIdArr = new ArrayList<>(storageEpic.get(id).getSubtasksId());
 
-        for (Integer iterator : tempSubtaskIdArr) {
-            deleteSubtaskById(iterator);
-            historyManager.remove(iterator);
-        }
-        storageEpic.remove(id);
-        historyManager.remove(id);
+            for (Integer iterator : tempSubtaskIdArr) {
+                deleteSubtaskById(iterator);
+                historyManager.remove(iterator);
+            }
+            storageEpic.remove(id);
+            historyManager.remove(id);
+        }catch (NullPointerException e) {
+        throw new ManagerSaveException(e.getMessage());
+    }
     }
 
 
@@ -142,7 +148,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask getSubtaskById(int id) throws NullPointerException{ //получение по id субтасков
+    public Subtask getSubtaskById(int id) throws ManagerSaveException{ //получение по id субтасков
     try{
         Subtask storageSubtaskTemp = storageSubtask.get(id);
         historyManager.add(storageSubtaskTemp);
@@ -169,14 +175,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteSubtaskById(Integer id) {
+    public void deleteSubtaskById(Integer id) throws ManagerSaveException{
+        try {
+            Integer epicId = storageSubtask.get(id).getEpicId();
 
-        Integer epicId = storageSubtask.get(id).getEpicId();
-
-        storageEpic.get(epicId).deleteId(id);
-        storageSubtask.remove(id);
-        updateEpicStatus(storageEpic.get(epicId));
-        historyManager.remove(id);
+            storageEpic.get(epicId).deleteId(id);
+            storageSubtask.remove(id);
+            updateEpicStatus(storageEpic.get(epicId));
+            historyManager.remove(id);
+        }catch (NullPointerException e ) {
+            throw new ManagerSaveException(e.getMessage());
+        }
     }
 
 
@@ -217,5 +226,29 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory(){
         return historyManager.getHistory();
+    }
+
+
+    public void getPrioritizedTasks() {
+
+
+    }
+
+
+    public void checkTheTaskCompletionTime(Task task) {
+        if (task.getStartTime() == null || prTask.size() == 0) {
+            prTask.add(task);
+        } else {
+            for (Task t : prTask) {
+                boolean startTimeIdent = t.getStartTime()
+                         .equals(task.getStartTime());
+                boolean notCorrectTimeEnd = task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime());
+                boolean notCorrectTimeStart = task.getStartTime().isAfter(t.getStartTime()) && task.getStartTime().isBefore(t.getEndTime());
+                if ( startTimeIdent || notCorrectTimeEnd || notCorrectTimeStart ){
+                    throw new RuntimeException("Задача на это время уже существует");
+                }
+            }
+            prTask.add(task);
+        }
     }
 }

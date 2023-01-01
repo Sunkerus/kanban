@@ -1,5 +1,6 @@
 package tasks;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Task {
@@ -58,8 +59,29 @@ public class Task {
                 "Id = " + id + ", " +
                 "name = " + name + ", " +
                 "description = " + description + ", " +
-                "statusTask = " + status;
+                "statusTask = " + status + ", " +
+                "StartTime" + startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        try {
+            return LocalDateTime.from(startTime).plusMinutes(duration);
+        } catch (NullPointerException ex) {
+            throw new RuntimeException("Время начала выполнения задачи или время выполнеиня не указаны");
+        }
+
+    }
 }

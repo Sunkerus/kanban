@@ -49,7 +49,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 () -> manager.getTaskById(25)
         );
 
-        assertNull(exception, "Менеджер возвращает другую задачу, вместо ошибки");
+        assertNull(exception.getMessage(), "Менеджер возвращает другую задачу, вместо ошибки");
     }
 
     @Test
@@ -90,7 +90,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldTaskBeRemoveById() {      //removeTask
+    public void shouldTaskDeleteById() {      //removeTask
         Task task1 = new Task("task1", "description1");
         manager.createTask(task1);
         final int idTask1 = task1.getId();
@@ -108,7 +108,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic1 = new Epic("Epic1", "description1");
         manager.createEpic(epic1);
         final int idEpic1 = epic1.getId();
-        Task createdEpic = manager.getEpicById(idEpic1);
+        Epic createdEpic = manager.getEpicById(idEpic1);
         assertNotNull(epic1, "Созданная задача не была получена");
         assertEquals(createdEpic, epic1, "Созданная задача не идентична полученной");
 
@@ -117,7 +117,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 () -> manager.getEpicById(25)
         );
 
-        assertNull(exception, "Менеджер возвращает другую задачу, вместо ошибки");
+        assertNull(exception.getMessage(), "Менеджер возвращает другую задачу, вместо ошибки");
     }
 
     @Test
@@ -219,6 +219,13 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Subtask createdSubtask = manager.getSubtaskById(idSubtask1);
         assertNotNull(subtask1, "Созданная подзадача не была получена");
         assertEquals(createdSubtask, subtask1, "Созданная подзадача не идентична полученной");
+
+        final Error exception = assertThrows(
+                Error.class,
+                () -> manager.getSubtaskById(25)
+        );
+
+        assertNull(exception.getMessage(), "Менеджер возвращает другой сабтаск, вместо ошибки");
     }
 
     @Test

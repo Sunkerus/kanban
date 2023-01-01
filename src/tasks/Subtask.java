@@ -25,6 +25,7 @@ public class Subtask extends Task {
                 "Id = " + id + ", " +
                 "name = " + name + ", " +
                 "description = " + description + ", " +
-                "statusTask = " + status;
+                "statusTask = " + status + ", " +
+                "startTime = " + startTime;
     }
 }
