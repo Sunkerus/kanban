@@ -1,10 +1,15 @@
 package tasks;
 
+import java.time.LocalDateTime;
+
 public class Task {
     protected String name;
     protected String description;
     protected Integer id;
     protected StatusTask status;
+
+    protected LocalDateTime startTime;
+    protected long duration;
 
     public Task(String name, String description) {
         this.name = name;
@@ -55,4 +60,6 @@ public class Task {
                 "description = " + description + ", " +
                 "statusTask = " + status;
     }
+
+
 }

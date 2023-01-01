@@ -1,5 +1,6 @@
 package tests;
 
+import errors.ManagerSaveException;
 import managers.TaskManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import tasks.StatusTask;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.io.File;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,6 +43,13 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Task createdTask = manager.getTaskById(idTask1);
         assertNotNull(task1, "Созданная задача не была получена");
         assertEquals(createdTask, task1, "Созданная задача не идентична полученной");
+
+        final Error exception = assertThrows(
+                Error.class,
+                () -> manager.getTaskById(25)
+        );
+
+        assertNull(exception, "Менеджер возвращает другую задачу, вместо ошибки");
     }
 
     @Test
@@ -102,6 +111,13 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Task createdEpic = manager.getEpicById(idEpic1);
         assertNotNull(epic1, "Созданная задача не была получена");
         assertEquals(createdEpic, epic1, "Созданная задача не идентична полученной");
+
+        final Error exception = assertThrows(
+                Error.class,
+                () -> manager.getEpicById(25)
+        );
+
+        assertNull(exception, "Менеджер возвращает другую задачу, вместо ошибки");
     }
 
     @Test

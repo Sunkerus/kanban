@@ -144,7 +144,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         try {
             return Arrays.stream(value.split(",")).map(Integer::parseInt).collect(Collectors.toList());
         }catch(NullPointerException e){
-            throw new ManagerSaveException("Не удаётся прочитать строчку в файле");
+            throw new ManagerSaveException("Не удаётся прочитать историю задач");
         }
     }
 

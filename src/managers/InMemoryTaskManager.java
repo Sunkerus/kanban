@@ -1,7 +1,9 @@
 package managers;
 
+import java.rmi.UnexpectedException;
 import java.util.*;
 
+import errors.ManagerSaveException;
 import tasks.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -38,11 +40,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskById(int id) { //получение по id
-
-        Task storageTaskTemp = storageTask.get(id);
-        historyManager.add(storageTaskTemp);
-        return storageTaskTemp;
+    public Task getTaskById(int id) throws NullPointerException { //получение по id
+        try {
+            Task storageTaskTemp = storageTask.get(id);
+            historyManager.add(storageTaskTemp);
+            return storageTaskTemp;
+        }catch (NullPointerException e) {
+            throw new ManagerSaveException(e.getMessage());
+        }
     }
 
     @Override
@@ -81,11 +86,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getEpicById(int id) { //получение по id
-
+    public Epic getEpicById(int id) throws NullPointerException{ //получение по id
+    try{
         Epic storageEpicTemp = storageEpic.get(id);
         historyManager.add(storageEpicTemp);
         return storageEpicTemp;
+    }catch (NullPointerException e) {
+        throw new ManagerSaveException(e.getMessage());
+        }
     }
 
     @Override
@@ -134,11 +142,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask getSubtaskById(int id) { //получение по id субтасков
-
+    public Subtask getSubtaskById(int id) throws NullPointerException{ //получение по id субтасков
+    try{
         Subtask storageSubtaskTemp = storageSubtask.get(id);
         historyManager.add(storageSubtaskTemp);
         return storageSubtaskTemp;
+    }catch (NullPointerException e) {
+        throw new ManagerSaveException(e.getMessage());
+    }
     }
 
     @Override

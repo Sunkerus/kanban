@@ -41,6 +41,4 @@ public class Epic extends Task {
                 "statusTask = " + status + ", " +
                 "subtaskInto = " + subtasksId;
     }
-
-
 }

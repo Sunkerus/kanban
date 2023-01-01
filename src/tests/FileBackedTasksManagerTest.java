@@ -30,17 +30,33 @@ public void shoudLoadFromFileFunctionThrowsManagerSaveExceptionWhenFilePathIsInc
     assertEquals(".\\Resources\\testSaveConfigEmpty.csv (Не удается найти указанный файл)",exception.getMessage());
 }
 
-/*@Test
-public void saveAndLoadWhenEpicWithoutSubtask() {
-    FileBackedTasksManager testForExceptions =  (FileBackedTasksManager) Managers.getDefault(new File(".\\Resources\\testSaveConfig.csv"));
-
+@Test
+public void saveAndLoadEmptyHistory() {
     Epic epic1 = new Epic("epic1","description");
+    manager.createEpic(epic1);
+
     final ManagerSaveException exception1 = assertThrows(
             ManagerSaveException.class,
-            () -> testForExceptions.loadFromFile(new File(".\\Resources\\testSaveConfig.csv"))
+            () -> manager.loadFromFile(new File(".\\Resources\\testSaveConfig.csv"))
     );
-    assertEquals("Не удаётся прочитать строчку в файле",exception1.getMessage());
+    assertEquals("Не удаётся прочитать историю задач",exception1.getMessage());
 }
-*/
+
+
+@Test
+    public void shouldEpicReturnCorrectWithoutSubtasks() {
+    Epic epic1 = new Epic("epic1","description");
+    manager.createEpic(epic1);
+    final int epicId = epic1.getId();
+    final Epic baseEpic = manager.getEpicById(epicId);
+
+    FileBackedTasksManager newManager = FileBackedTasksManager.loadFromFile(new File(".\\Resources\\testSaveConfig.csv"));
+
+    final Epic savedEpic1 = newManager.getEpicById(epicId);
+
+    assertEquals(baseEpic.getSubtasksId(),savedEpic1.getSubtasksId(),"Загруженные эпики различны, у них есть подзадачи");
+
+}
+
 
 }
