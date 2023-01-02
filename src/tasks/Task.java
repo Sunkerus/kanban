@@ -9,7 +9,7 @@ public class Task {
     protected Integer id;
     protected StatusTask status;
 
-    protected LocalDateTime startTime;
+    protected LocalDateTime startTime = LocalDateTime.now();
     protected long duration;
 
     public Task(String name, String description) {
