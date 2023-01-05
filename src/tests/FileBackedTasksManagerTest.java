@@ -13,50 +13,53 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
+
+    private final FileBackedTasksManager manager = super.getTasksManager();
+
     public FileBackedTasksManagerTest() {
         super((FileBackedTasksManager) Managers.getDefault(new File(".\\Resources\\testSaveConfig.csv")));
     }
 
-    private final FileBackedTasksManager manager = super.getTasksManager();
+    @Test
+    public void shoudLoadFromFileFunctionThrowsManagerSaveExceptionWhenFilePathIsIncorrect() {
+        FileBackedTasksManager testForExceptions = (FileBackedTasksManager) Managers.getDefault(new File(".\\Resources\\testSaveConfig.csv"));
+        final ManagerSaveException exception = assertThrows(
+                ManagerSaveException.class,
+                () -> testForExceptions.loadFromFile(new File(".\\Resources\\testSaveConfigEmpty.csv"))
+        );
 
-@Test
-public void shoudLoadFromFileFunctionThrowsManagerSaveExceptionWhenFilePathIsIncorrect() {
-    FileBackedTasksManager testForExceptions =  (FileBackedTasksManager) Managers.getDefault(new File(".\\Resources\\testSaveConfig.csv"));
-    final ManagerSaveException exception = assertThrows(
-            ManagerSaveException.class,
-            () -> testForExceptions.loadFromFile(new File(".\\Resources\\testSaveConfigEmpty.csv"))
-    );
+        assertEquals(".\\Resources\\testSaveConfigEmpty.csv (Не удается найти указанный файл)", exception.getMessage());
+    }
 
-    assertEquals(".\\Resources\\testSaveConfigEmpty.csv (Не удается найти указанный файл)",exception.getMessage());
-}
+    @Test
+    public void saveAndLoadEmptyHistory() {
+        Epic epic1 = new Epic("epic1", "description");
+        manager.createEpic(epic1);
 
-@Test
-public void saveAndLoadEmptyHistory() {
-    Epic epic1 = new Epic("epic1","description");
-    manager.createEpic(epic1);
-
-    final ManagerSaveException exception1 = assertThrows(
-            ManagerSaveException.class,
-            () -> manager.loadFromFile(new File(".\\Resources\\testSaveConfig.csv"))
-    );
-    assertEquals("Не удаётся прочитать историю задач",exception1.getMessage());
-}
+        final ManagerSaveException exception1 = assertThrows(
+                ManagerSaveException.class,
+                () -> manager.loadFromFile(new File(".\\Resources\\testSaveConfig.csv"))
+        );
+        assertEquals("Не удаётся прочитать историю задач", exception1.getMessage());
+    }
 
 
-@Test
+    @Test
     public void shouldEpicReturnCorrectWithoutSubtasks() {
-    Epic epic1 = new Epic("epic1","description");
-    manager.createEpic(epic1);
-    final int epicId = epic1.getId();
-    final Epic baseEpic = manager.getEpicById(epicId);
+        Epic epic1 = new Epic("epic1", "description");
+        manager.createEpic(epic1);
+        final int epicId = epic1.getId();
+        final Epic baseEpic = manager.getEpicById(epicId);
 
-    FileBackedTasksManager newManager = FileBackedTasksManager.loadFromFile(new File(".\\Resources\\testSaveConfig.csv"));
+        FileBackedTasksManager newManager = FileBackedTasksManager.loadFromFile(new File(".\\Resources\\testSaveConfig.csv"));
 
-    final Epic savedEpic1 = newManager.getEpicById(epicId);
+        final Epic savedEpic1 = newManager.getEpicById(epicId);
 
-    assertEquals(baseEpic.getSubtasksId(),savedEpic1.getSubtasksId(),"Загруженные эпики различны, у них есть подзадачи");
+        assertEquals(baseEpic.getSubtasksId(), savedEpic1.getSubtasksId(), "Загруженные эпики различны, у них есть подзадачи");
 
-}
+    }
+
+    //add test methods for sort dy time
 
 
 }
