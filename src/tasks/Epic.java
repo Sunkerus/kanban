@@ -2,6 +2,7 @@ package tasks;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Epic extends Task {
 
@@ -44,9 +45,4 @@ public class Epic extends Task {
                 "subtaskInto = " + subtasksId;
 
     }
-
-
-
-
-
 }

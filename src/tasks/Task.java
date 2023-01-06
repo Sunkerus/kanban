@@ -2,6 +2,7 @@ package tasks;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Task {
     protected String name;
@@ -83,5 +84,16 @@ public class Task {
             throw new RuntimeException("Время начала выполнения задачи или время выполнеиня не указаны");
         }
 
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Subtask subtask = (Subtask) obj;
+        return Objects.equals(getId(), subtask.getId()) &&
+                Objects.equals(subtask.getName(), getName()) &&
+                Objects.equals(subtask.getDescription(), getDescription()) &&
+                Objects.equals(subtask.getStatus(), getStatus());
     }
 }
