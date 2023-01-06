@@ -81,7 +81,7 @@ public class Task {
         try {
             return LocalDateTime.from(startTime).plusMinutes(duration);
         } catch (NullPointerException ex) {
-            throw new RuntimeException("Время начала выполнения задачи или время выполнеиня не указаны");
+            throw new RuntimeException("Время начала выполнения задачи или время выполнения не указаны");
         }
 
     }
@@ -90,7 +90,7 @@ public class Task {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        Subtask subtask = (Subtask) obj;
+        Task subtask = (Task) obj;
         return Objects.equals(getId(), subtask.getId()) &&
                 Objects.equals(subtask.getName(), getName()) &&
                 Objects.equals(subtask.getDescription(), getDescription()) &&
