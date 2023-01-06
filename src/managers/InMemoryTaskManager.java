@@ -1,7 +1,5 @@
 package managers;
 
-import java.rmi.UnexpectedException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import errors.ManagerSaveException;
@@ -9,7 +7,7 @@ import tasks.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    Set<Task> prTask;
+    private Set<Task> prTask;
     private int generateId = 0;
 
     protected final HashMap<Integer, Task> storageTask = new HashMap<>();
@@ -47,28 +45,28 @@ public class InMemoryTaskManager implements TaskManager {
             Task storageTaskTemp = storageTask.get(id);
             historyManager.add(storageTaskTemp);
             return storageTaskTemp;
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             throw new ManagerSaveException(e.getMessage());
         }
     }
 
     @Override
     public void createTask(Task task) { // создание задачи(объект передаётся в качестве параметра)
-
+        //add check task status with time
         storageTask.put(generateId(), task);
         task.setId(generateId);
     }
 
     @Override
     public void updateTask(Task task) { // обновление задачи
-
+        //same time tasks
         storageTask.put(task.getId(), task);
     }
 
     @Override
     public void deleteTaskById(int id) {
-            storageTask.remove(id);
-            historyManager.remove(id);
+        storageTask.remove(id);
+        historyManager.remove(id);
     }
 
 
@@ -88,13 +86,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getEpicById(int id) throws ManagerSaveException{ //получение по id
-    try{
-        Epic storageEpicTemp = storageEpic.get(id);
-        historyManager.add(storageEpicTemp);
-        return storageEpicTemp;
-    }catch (NullPointerException e) {
-        throw new ManagerSaveException(e.getMessage());
+    public Epic getEpicById(int id) throws ManagerSaveException { //получение по id
+        try {
+            Epic storageEpicTemp = storageEpic.get(id);
+            historyManager.add(storageEpicTemp);
+            return storageEpicTemp;
+        } catch (NullPointerException e) {
+            throw new ManagerSaveException(e.getMessage());
         }
     }
 
@@ -111,7 +109,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteEpicById(int id) throws ManagerSaveException{
+    public void deleteEpicById(int id) throws ManagerSaveException {
         try {
             //копируем массив
             ArrayList<Integer> tempSubtaskIdArr = new ArrayList<>(storageEpic.get(id).getSubtasksId());
@@ -122,9 +120,9 @@ public class InMemoryTaskManager implements TaskManager {
             }
             storageEpic.remove(id);
             historyManager.remove(id);
-        }catch (NullPointerException e) {
-        throw new ManagerSaveException(e.getMessage());
-    }
+        } catch (NullPointerException e) {
+            throw new ManagerSaveException(e.getMessage());
+        }
     }
 
 
@@ -148,14 +146,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask getSubtaskById(int id) throws ManagerSaveException{ //получение по id субтасков
-    try{
-        Subtask storageSubtaskTemp = storageSubtask.get(id);
-        historyManager.add(storageSubtaskTemp);
-        return storageSubtaskTemp;
-    }catch (NullPointerException e) {
-        throw new ManagerSaveException(e.getMessage());
-    }
+    public Subtask getSubtaskById(int id) throws ManagerSaveException { //получение по id субтасков
+        try {
+            Subtask storageSubtaskTemp = storageSubtask.get(id);
+            historyManager.add(storageSubtaskTemp);
+            return storageSubtaskTemp;
+        } catch (NullPointerException e) {
+            throw new ManagerSaveException(e.getMessage());
+        }
     }
 
     @Override
@@ -175,7 +173,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteSubtaskById(Integer id) throws ManagerSaveException{
+    public void deleteSubtaskById(Integer id) throws ManagerSaveException {
         try {
             Integer epicId = storageSubtask.get(id).getEpicId();
 
@@ -183,7 +181,7 @@ public class InMemoryTaskManager implements TaskManager {
             storageSubtask.remove(id);
             updateEpicStatus(storageEpic.get(epicId));
             historyManager.remove(id);
-        }catch (NullPointerException e ) {
+        } catch (NullPointerException e) {
             throw new ManagerSaveException(e.getMessage());
         }
     }
@@ -224,13 +222,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getHistory(){
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
-
-    public void getPrioritizedTasks() {
-
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        //rewrite later
+        return new ArrayList<Task>();
 
     }
 
@@ -241,10 +240,10 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             for (Task t : prTask) {
                 boolean startTimeIdent = t.getStartTime()
-                         .equals(task.getStartTime());
+                        .equals(task.getStartTime());
                 boolean notCorrectTimeEnd = task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime());
                 boolean notCorrectTimeStart = task.getStartTime().isAfter(t.getStartTime()) && task.getStartTime().isBefore(t.getEndTime());
-                if ( startTimeIdent || notCorrectTimeEnd || notCorrectTimeStart ){
+                if (startTimeIdent || notCorrectTimeEnd || notCorrectTimeStart) {
                     throw new RuntimeException("Задача на это время уже существует");
                 }
             }
