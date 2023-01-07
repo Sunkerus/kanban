@@ -8,14 +8,12 @@ import comparators.TimeTaskComparator;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private Set<Task> prTask = new TreeSet<>(new TimeTaskComparator()) {
-    };
+    private final Set<Task> prTask = new TreeSet<>(new TimeTaskComparator());
     private int generateId = 0;
 
     protected final HashMap<Integer, Task> storageTask = new HashMap<>();
     protected final HashMap<Integer, Epic> storageEpic = new HashMap<>();
     protected final HashMap<Integer, Subtask> storageSubtask = new HashMap<>();
-
     protected final HistoryManager historyManager = Managers.getDefaultHistory();
 
 
@@ -26,23 +24,23 @@ public class InMemoryTaskManager implements TaskManager {
         return generateId;
     }
 
-    //методы для задач
+    //methods for tasks
 
     @Override
-    public ArrayList<Task> getAllTask() { //получение списка задач
+    public ArrayList<Task> getAllTask() {
 
         Collection<Task> values = storageTask.values();
         return new ArrayList<>(values);
     }
 
     @Override
-    public void removeAllTask() { //удаление всех задач
+    public void removeAllTask() {
         storageTask.clear();
 
     }
 
     @Override
-    public Task getTaskById(int id) throws ManagerSaveException { //получение по id
+    public Task getTaskById(int id) throws ManagerSaveException {
         try {
             Task storageTaskTemp = storageTask.get(id);
             historyManager.add(storageTaskTemp);
@@ -53,7 +51,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createTask(Task task) { // создание задачи(объект передаётся в качестве параметра)
+    public void createTask(Task task) {
         //add check task status with time
         checkTheTaskCompletionTime(task);
         storageTask.put(generateId(), task);
@@ -61,7 +59,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(Task task) { // обновление задачи
+    public void updateTask(Task task) {
         checkTheTaskCompletionTime(task);
         storageTask.put(task.getId(), task);
     }
@@ -73,23 +71,23 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-    //методы для эпиков
+    //methods for epics
 
     @Override
-    public ArrayList<Epic> getAllEpic() { //получение списка эпиков
+    public ArrayList<Epic> getAllEpic() {
 
         Collection<Epic> values = storageEpic.values();
         return new ArrayList<>(values);
     }
 
     @Override
-    public void removeAllEpic() { //удаление всех эпиков
+    public void removeAllEpic() {
         storageEpic.clear();
-        storageSubtask.clear();         //удаляем все сабтаски
+        storageSubtask.clear();
     }
 
     @Override
-    public Epic getEpicById(int id) throws ManagerSaveException { //получение по id
+    public Epic getEpicById(int id) throws ManagerSaveException {
         try {
             Epic storageEpicTemp = storageEpic.get(id);
             historyManager.add(storageEpicTemp);
@@ -100,14 +98,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createEpic(Epic epic) { // создание эпика(объект передаётся в качестве параметра)
+    public void createEpic(Epic epic) {
         checkTheTaskCompletionTime(epic);
         storageEpic.put(generateId(), epic);
         epic.setId(generateId);
     }
 
     @Override
-    public void updateEpic(Epic epic) { // обновление эпика
+    public void updateEpic(Epic epic) {
         checkTheTaskCompletionTime(epic);
         storageTask.put(epic.getId(), epic);
     }
@@ -130,10 +128,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-    //методя для подзадач
+    //methods for subtasks
 
     @Override
-    public ArrayList<Subtask> getAllSubtask() { //получение списка подзадач
+    public ArrayList<Subtask> getAllSubtask() {
 
         Collection<Subtask> values = storageSubtask.values();
         return new ArrayList<>(values);
@@ -141,16 +139,16 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public void removeAllSubtask() { //удаление всех субтасков
-        for (Epic iterator : storageEpic.values()) { //обновление статусов всех эпиков
+    public void removeAllSubtask() {
+        for (Epic iterator : storageEpic.values()) {
             iterator.setStatus(StatusTask.NEW);
-            iterator.clearAllId();                   //очистка коллекции идентификаторов в каждом эпике
+            iterator.clearAllId();
         }
         storageSubtask.clear();
     }
 
     @Override
-    public Subtask getSubtaskById(int id) throws ManagerSaveException { //получение по id сабтасков
+    public Subtask getSubtaskById(int id) throws ManagerSaveException {
         try {
             Subtask storageSubtaskTemp = storageSubtask.get(id);
             historyManager.add(storageSubtaskTemp);
@@ -161,19 +159,19 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createSubtask(Subtask subtask) { // создание сабтаска(объект передаётся в качестве параметра)
-        checkTheTaskCompletionTime(subtask);        //проверка времени старта подзадачи
-        storageSubtask.put(generateId(), subtask);      //добавление подзадачи в MAP для подзадач  в эпике
-        subtask.setId(generateId); //присвоение id
-        storageEpic.get(subtask.getEpicId()).addId(subtask.getId()); //добавление идентификатора в список подзадач эпика
-        updateEpicStatus(storageEpic.get(subtask.getEpicId()));   //обновление статуса эпика
+    public void createSubtask(Subtask subtask) {
+        checkTheTaskCompletionTime(subtask);
+        storageSubtask.put(generateId(), subtask);
+        subtask.setId(generateId);
+        storageEpic.get(subtask.getEpicId()).addId(subtask.getId());
+        updateEpicStatus(storageEpic.get(subtask.getEpicId()));
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) { // обновление подзадачи
+    public void updateSubtask(Subtask subtask) {
         checkTheTaskCompletionTime(subtask);
         storageSubtask.put(subtask.getId(), subtask);
-        updateEpicStatus(storageEpic.get(subtask.getEpicId())); //обновление статуса эпика
+        updateEpicStatus(storageEpic.get(subtask.getEpicId()));
     }
 
     @Override
@@ -190,8 +188,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-
-//additional methods
 
     @Override
     public ArrayList<Subtask> getListSubtaskOfEpic(Integer id) {
@@ -232,9 +228,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Set<Task> getPrioritizedTasks() {
-        //rewrite later
         return prTask;
-
     }
 
 
@@ -242,13 +236,13 @@ public class InMemoryTaskManager implements TaskManager {
         if (task.getStartTime() == null || prTask.size() == 0) {
             prTask.add(task);
         } else {
-            for (Task t : prTask) {
-                boolean startTimeIdent = t.getStartTime()
+            for (Task iterTask : prTask) {
+                boolean startTimeIdent = iterTask.getStartTime()
                         .equals(task.getStartTime());
-                boolean notCorrectTimeEnd = task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime());
-                boolean notCorrectTimeStart = task.getStartTime().isAfter(t.getStartTime()) && task.getStartTime().isBefore(t.getEndTime());
+                boolean notCorrectTimeEnd = task.getEndTime().isAfter(iterTask.getStartTime()) && task.getEndTime().isBefore(iterTask.getEndTime());
+                boolean notCorrectTimeStart = task.getStartTime().isAfter(iterTask.getStartTime()) && task.getStartTime().isBefore(iterTask.getEndTime());
                 if (startTimeIdent || notCorrectTimeEnd || notCorrectTimeStart) {
-                    throw new RuntimeException("Задача на это время уже существует");
+                    throw new RuntimeException("Задача на это время уже создана.");
                 }
             }
             prTask.add(task);
