@@ -3,6 +3,7 @@ package managers;
 import tasks.*;
 
 import java.util.List;
+import java.util.Set;
 
 
 public interface TaskManager {
@@ -60,5 +61,5 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    List<Task> getPrioritizedTasks();
+    Set<Task> getPrioritizedTasks();
 }

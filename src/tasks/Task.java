@@ -61,7 +61,7 @@ public class Task {
                 "name = " + name + ", " +
                 "description = " + description + ", " +
                 "statusTask = " + status + ", " +
-                "StartTime" + startTime;
+                "StartTime" + startTime ;
     }
 
     public void setStartTime(LocalDateTime startTime) {
@@ -83,7 +83,6 @@ public class Task {
         } catch (NullPointerException ex) {
             throw new RuntimeException("Время начала выполнения задачи или время выполнения не указаны");
         }
-
     }
 
     @Override

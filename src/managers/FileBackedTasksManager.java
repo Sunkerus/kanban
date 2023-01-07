@@ -266,17 +266,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         TaskManager fileTaskManager = Managers.getDefault(saveFilePath);
 
         Epic epic3 = new Epic("name", "description");
-        epic3.setStartTime(LocalDateTime.of(2222, FEBRUARY, 2, 10, 10));
+        epic3.setStartTime(LocalDateTime.of(2000, FEBRUARY, 2, 10, 10));
         epic3.setDuration(30);
         fileTaskManager.createEpic(epic3);
         Task task3 = new Task("name", "description");
-        task3.setStartTime(LocalDateTime.of(2222, FEBRUARY, 2, 22, 22));
+        task3.setStartTime(LocalDateTime.of(2222, FEBRUARY, 1, 22, 22));
         task3.setDuration(40);
         fileTaskManager.createTask(task3);
         fileTaskManager.getEpicById(1);
         fileTaskManager.getTaskById(2);
         Subtask subtask3_1 = new Subtask("name", "description");
-        subtask3_1.setStartTime(LocalDateTime.of(2222, FEBRUARY, 2, 22, 22));
+        subtask3_1.setStartTime(LocalDateTime.of(1970, FEBRUARY, 3, 5, 22));
         subtask3_1.setEpicId(1);
         subtask3_1.setDuration(10);
         fileTaskManager.createSubtask(subtask3_1);
@@ -304,7 +304,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println(fileTaskManager1.getAllTask());
         System.out.println("====================История====================");
         System.out.println(fileTaskManager1.getHistory());
-
+        System.out.println("\n");
+        System.out.println(fileTaskManager.getPrioritizedTasks());
     }
 
 }
