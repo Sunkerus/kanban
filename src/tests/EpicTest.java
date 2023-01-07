@@ -35,7 +35,7 @@ class EpicTest {
 
         StatusTask stausEpic = manager.getEpicById(epicTestId).getStatus();
 
-        assertEquals(StatusTask.NEW, stausEpic,"Не верно задан статус эпика при создании");
+        assertEquals(StatusTask.NEW, stausEpic, "Не верно задан статус эпика при создании");
     }
 
     @Test
@@ -44,8 +44,8 @@ class EpicTest {
         manager.createEpic(epicTest);
         final int epicTestId = epicTest.getId();
 
-        Subtask subtaskTest1 = new Subtask("TestSubtask1","TestSubtask1");
-        Subtask subtaskTest2 = new Subtask("TestSubtask2","TestSubtask2");
+        Subtask subtaskTest1 = new Subtask("TestSubtask1", "TestSubtask1");
+        Subtask subtaskTest2 = new Subtask("TestSubtask2", "TestSubtask2");
 
         subtaskTest1.setStatus(StatusTask.NEW);
         subtaskTest1.setStatus(StatusTask.NEW);
@@ -59,7 +59,7 @@ class EpicTest {
         StatusTask statusEpic = manager.getEpicById(epicTestId).getStatus();
 
 
-        assertEquals(StatusTask.NEW,statusEpic,"Не верно изменяется статус эпика, когда статус всех подзадач NEW");
+        assertEquals(StatusTask.NEW, statusEpic, "Не верно изменяется статус эпика, когда статус всех подзадач NEW");
 
     }
 
@@ -70,8 +70,8 @@ class EpicTest {
         manager.createEpic(epicTest);
         final int epicTestId = epicTest.getId();
 
-        Subtask subtaskTest1 = new Subtask("TestSubtask1","TestSubtask1");
-        Subtask subtaskTest2 = new Subtask("TestSubtask2","TestSubtask2");
+        Subtask subtaskTest1 = new Subtask("TestSubtask1", "TestSubtask1");
+        Subtask subtaskTest2 = new Subtask("TestSubtask2", "TestSubtask2");
 
         subtaskTest1.setStatus(StatusTask.DONE);
         subtaskTest2.setStatus(StatusTask.DONE);
@@ -84,7 +84,7 @@ class EpicTest {
 
         StatusTask statusEpic = manager.getEpicById(epicTestId).getStatus();
 
-        assertEquals(StatusTask.DONE,statusEpic,"Не верно изменяется статус эпика, когда статус всех подзадач DONE");
+        assertEquals(StatusTask.DONE, statusEpic, "Не верно изменяется статус эпика, когда статус всех подзадач DONE");
     }
 
     @Test
@@ -93,8 +93,8 @@ class EpicTest {
         manager.createEpic(epicTest);
         final int epicTestId = epicTest.getId();
 
-        Subtask subtaskTest1 = new Subtask("TestSubtask1","TestSubtask1");
-        Subtask subtaskTest2 = new Subtask("TestSubtask2","TestSubtask2");
+        Subtask subtaskTest1 = new Subtask("TestSubtask1", "TestSubtask1");
+        Subtask subtaskTest2 = new Subtask("TestSubtask2", "TestSubtask2");
 
         subtaskTest1.setStatus(StatusTask.DONE);
         subtaskTest2.setStatus(StatusTask.NEW);
@@ -107,7 +107,7 @@ class EpicTest {
 
         StatusTask statusEpic = manager.getEpicById(epicTestId).getStatus();
 
-        assertEquals(StatusTask.IN_PROGRESS,statusEpic,"Не верно изменяется статус эпика на IN_PROGRESS, когда статус подзадач DONE и NEW");
+        assertEquals(StatusTask.IN_PROGRESS, statusEpic, "Не верно изменяется статус эпика на IN_PROGRESS, когда статус подзадач DONE и NEW");
     }
 
     @Test
@@ -116,8 +116,8 @@ class EpicTest {
         manager.createEpic(epicTest);
         final int epicTestId = epicTest.getId();
 
-        Subtask subtaskTest1 = new Subtask("TestSubtask1","TestSubtask1");
-        Subtask subtaskTest2 = new Subtask("TestSubtask2","TestSubtask2");
+        Subtask subtaskTest1 = new Subtask("TestSubtask1", "TestSubtask1");
+        Subtask subtaskTest2 = new Subtask("TestSubtask2", "TestSubtask2");
 
         subtaskTest1.setStatus(StatusTask.IN_PROGRESS);
         subtaskTest2.setStatus(StatusTask.IN_PROGRESS);
@@ -130,7 +130,7 @@ class EpicTest {
 
         StatusTask statusEpic = manager.getEpicById(epicTestId).getStatus();
 
-        assertEquals(StatusTask.IN_PROGRESS,statusEpic,"Не верно изменяется статус эпика на IN_PROGRESS, когда статус подзадач DONE и NEW");
+        assertEquals(StatusTask.IN_PROGRESS, statusEpic, "Не верно изменяется статус эпика на IN_PROGRESS, когда статус подзадач DONE и NEW");
     }
 
 }

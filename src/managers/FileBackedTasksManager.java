@@ -4,12 +4,11 @@ import tasks.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+
 import static java.time.Month.*;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -100,7 +99,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             case "Task":
                 return String.join(",", Integer.toString(task.getId()), TypeTask.TASK.name(), task.getName(), task.getStatus().name(), task.getDescription(), task.getStartTime().format(ISO_LOCAL_DATE_TIME), "");
             case "Epic":
-                return String.join(",", Integer.toString(task.getId()), TypeTask.EPIC.name(), task.getName(), task.getStatus().name(), task.getDescription(), task.getStartTime().format(ISO_LOCAL_DATE_TIME) ,"");
+                return String.join(",", Integer.toString(task.getId()), TypeTask.EPIC.name(), task.getName(), task.getStatus().name(), task.getDescription(), task.getStartTime().format(ISO_LOCAL_DATE_TIME), "");
             case "Subtask":
                 Subtask tempSubtask = (Subtask) task;
                 return String.join(",", Integer.toString(tempSubtask.getId()), TypeTask.SUBTASK.name(), tempSubtask.getName(), task.getStatus().name(), tempSubtask.getDescription(), task.getStartTime().format(ISO_LOCAL_DATE_TIME), Integer.toString(tempSubtask.getEpicId()));
@@ -147,10 +146,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return null;
     }
 
-    private static List<Integer> historyFromString(String value) throws ManagerSaveException{
+    private static List<Integer> historyFromString(String value) throws ManagerSaveException {
         try {
             return Arrays.stream(value.split(",")).map(Integer::parseInt).collect(Collectors.toList());
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             throw new ManagerSaveException("Не удаётся прочитать историю задач");
         }
     }
@@ -291,7 +290,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileTaskManager.getTaskById(2).setStatus(StatusTask.IN_PROGRESS);
         System.out.println("\nИзменим статус задачи");
         System.out.println(fileTaskManager.getTaskById(2));
-
 
 
         File loadFilePath = new File(".\\Resources\\saveConfig.csv");

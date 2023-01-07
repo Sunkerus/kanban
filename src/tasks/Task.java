@@ -61,7 +61,7 @@ public class Task {
                 "name = " + name + ", " +
                 "description = " + description + ", " +
                 "statusTask = " + status + ", " +
-                "StartTime" + startTime ;
+                "StartTime" + startTime;
     }
 
     public void setStartTime(LocalDateTime startTime) {

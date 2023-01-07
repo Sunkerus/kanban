@@ -342,10 +342,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.getEpicById(idEpic1);
         manager.getSubtaskById(subtaskId);
 
-       List<Task> historyFromManager = manager.getHistory();
-       final boolean isHere = historyFromManager.contains(epic1) && historyFromManager.contains(subtask1);
+        List<Task> historyFromManager = manager.getHistory();
+        final boolean isHere = historyFromManager.contains(epic1) && historyFromManager.contains(subtask1);
 
-       assertTrue(isHere,"История не возвращается");
+        assertTrue(isHere, "История не возвращается");
 
     }
 }
