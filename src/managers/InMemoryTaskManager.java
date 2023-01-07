@@ -8,7 +8,7 @@ import comparators.TimeTaskComparator;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private final Set<Task> prTask = new TreeSet<>(new TimeTaskComparator());
+    protected final Set<Task> prTask = new TreeSet<>(new TimeTaskComparator());
     private int generateId = 0;
 
     protected final HashMap<Integer, Task> storageTask = new HashMap<>();
@@ -113,7 +113,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteEpicById(int id) throws ManagerSaveException {
         try {
-            //копируем массив
             ArrayList<Integer> tempSubtaskIdArr = new ArrayList<>(storageEpic.get(id).getSubtasksId());
 
             for (Integer iterator : tempSubtaskIdArr) {
@@ -132,7 +131,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Subtask> getAllSubtask() {
-
         Collection<Subtask> values = storageSubtask.values();
         return new ArrayList<>(values);
     }
@@ -232,7 +230,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-    private void checkTheTaskCompletionTime(Task task) {
+    protected void checkTheTaskCompletionTime(Task task) {
         if (task.getStartTime() == null || prTask.size() == 0) {
             prTask.add(task);
         } else {

@@ -1,17 +1,18 @@
 package tasks;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
+
     protected String name;
     protected String description;
     protected Integer id;
     protected StatusTask status;
 
     protected LocalDateTime startTime = LocalDateTime.now();
-    protected long duration;
+    protected LocalDateTime endTime = LocalDateTime.now();
+    protected long duration = 0;
 
     public Task(String name, String description) {
         this.name = name;
@@ -61,14 +62,17 @@ public class Task {
                 "name = " + name + ", " +
                 "description = " + description + ", " +
                 "statusTask = " + status + ", " +
-                "StartTime" + startTime;
+                "startTime = " + startTime + ", " +
+                "endTime = " + getEndTime();
     }
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -79,17 +83,18 @@ public class Task {
 
     public LocalDateTime getEndTime() {
         try {
-            return LocalDateTime.from(startTime).plusMinutes(duration);
-        } catch (NullPointerException ex) {
+            endTime = LocalDateTime.from(startTime).plusMinutes(duration);
+            return endTime;
+        } catch (NullPointerException e) {
             throw new RuntimeException("Время начала выполнения задачи или время выполнения не указаны");
         }
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Task subtask = (Task) obj;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task subtask = (Task) o;
         return Objects.equals(getId(), subtask.getId()) &&
                 Objects.equals(subtask.getName(), getName()) &&
                 Objects.equals(subtask.getDescription(), getDescription()) &&

@@ -1,10 +1,12 @@
 package tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import managers.InMemoryTaskManager;
 public class Epic extends Task {
 
-    private ArrayList<Integer> subtasksId = new ArrayList<>();
+    private final ArrayList<Integer> subtasksId = new ArrayList<>();
 
     public Epic(String name, String description) {
         super(name, description);
@@ -17,7 +19,6 @@ public class Epic extends Task {
     public void deleteId(Integer valueId) {
         subtasksId.remove(valueId);
     }
-
 
     public void setSubtasksId(Integer id) {
         subtasksId.add(id);
@@ -40,6 +41,7 @@ public class Epic extends Task {
                 "description = " + description + ", " +
                 "statusTask = " + status + ", " +
                 "startTime = " + startTime + ", " +
+                "endTime = " + getEndTime() + ", " +
                 "subtaskInto = " + subtasksId;
 
     }
