@@ -25,7 +25,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void save() throws ManagerSaveException {
         try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
 
-            writer.write("id,type,name,status,description,startTime,endTime,epic" + System.lineSeparator());
+            writer.write("id,type,name,status,description,startTime,duration,endTime,epic" + System.lineSeparator());
 
             for (Map.Entry<Integer, Task> task : super.storageTask.entrySet()) {
                 writer.write(toString(task.getValue()) + System.lineSeparator());
@@ -98,14 +98,43 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     //for write
     private String toString(Task task) throws ManagerSaveException {
         String className = task.getClass().getSimpleName();
+
         switch (className) {
             case "Task":
-                return String.join(",", Integer.toString(task.getId()), TypeTask.TASK.name(), task.getName(), task.getStatus().name(), task.getDescription(), task.getStartTime().format(ISO_LOCAL_DATE_TIME),task.getEndTime().format(ISO_LOCAL_DATE_TIME),"");
+                return String.join(",",
+                                    Integer.toString(task.getId()),
+                                    TypeTask.TASK.name(),
+                                    task.getName(),
+                                    task.getStatus().name(),
+                                    task.getDescription(),
+                                    (task.getStartTime() != null) ? task.getStartTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                                    Long.toString(task.getDuration()),
+                                    (task.getEndTime() != null) ? task.getEndTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                                    "");
             case "Epic":
-                return String.join(",", Integer.toString(task.getId()), TypeTask.EPIC.name(), task.getName(), task.getStatus().name(), task.getDescription(), task.getStartTime().format(ISO_LOCAL_DATE_TIME),task.getEndTime().format(ISO_LOCAL_DATE_TIME), "");
-            case "Subtask":
+                Epic tempEpic = (Epic) task;
+                return String.join(",",
+                                    Integer.toString(tempEpic.getId()),
+                                    TypeTask.EPIC.name(),
+                                    tempEpic.getName(),
+                                    tempEpic.getStatus().name(),
+                                    tempEpic.getDescription(),
+                                    (tempEpic.getStartTime() != null && tempEpic.getSubtasksId().isEmpty()) ? tempEpic.getStartTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                                    Long.toString(tempEpic.getDuration()),
+                                    (tempEpic.getEndTime() != null && tempEpic.getSubtasksId().isEmpty()) ? tempEpic.getEndTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                                    "");
+                case "Subtask":
                 Subtask tempSubtask = (Subtask) task;
-                return String.join(",", Integer.toString(tempSubtask.getId()), TypeTask.SUBTASK.name(), tempSubtask.getName(), task.getStatus().name(), tempSubtask.getDescription(), task.getStartTime().format(ISO_LOCAL_DATE_TIME),task.getEndTime().format(ISO_LOCAL_DATE_TIME), Integer.toString(tempSubtask.getEpicId()));
+                return String.join(",",
+                                    Integer.toString(tempSubtask.getId()),
+                                    TypeTask.SUBTASK.name(),
+                                    tempSubtask.getName(),
+                                    tempSubtask.getStatus().name(),
+                                    tempSubtask.getDescription(),
+                                    (tempSubtask.getStartTime() != null) ? tempSubtask.getStartTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                                    Long.toString(task.getDuration()),
+                                    (tempSubtask.getEndTime() != null) ? tempSubtask.getEndTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                                    Integer.toString(tempSubtask.getEpicId()));
             default:
                 throw new ManagerSaveException("Ошибка преобразование в строку");
         }
@@ -122,30 +151,31 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     //for read
     private Task fromString(String value) {
         String[] tempStr = value.split(",");
-        if ((tempStr.length == 7) || (tempStr.length == 8)) {
+        if ((tempStr.length == 8) || (tempStr.length == 9)) {
             switch (tempStr[1]) {
                 case "TASK":
                     Task tempTask = new Task(tempStr[2], tempStr[4]);
                     tempTask.setId((Integer.parseInt(tempStr[0])));
                     tempTask.setStatus(StatusTask.valueOf(tempStr[3]));
-                    tempTask.setStartTime(LocalDateTime.parse(tempStr[5]));
-                    tempTask.setEndTime(LocalDateTime.parse(tempStr[6]));
+                    tempTask.setStartTime( (tempStr[5].equals("TimeNotSelected")) ? null: LocalDateTime.parse(tempStr[5]) );
+                    tempTask.setDuration(Long.parseLong(tempStr[6]));
                     return tempTask;
                 case "EPIC":
                     Epic tempEpic = new Epic(tempStr[2], tempStr[4]);
                     tempEpic.setId((Integer.parseInt(tempStr[0])));
                     tempEpic.setStatus(StatusTask.valueOf(tempStr[3]));
-                    tempEpic.setStartTime(LocalDateTime.parse(tempStr[5]));
-                    tempEpic.setEndTime(LocalDateTime.parse(tempStr[6]));
+                    tempEpic.setStartTime( (tempStr[5].equals("TimeNotSelected")) ? null: LocalDateTime.parse(tempStr[5]) );
+                    tempEpic.setDuration(Long.parseLong(tempStr[6]));
+                    tempEpic.setEndTime( (tempStr[5].equals("TimeNotSelected")) ? null: LocalDateTime.parse(tempStr[5]) );
                     return tempEpic;
                 case "SUBTASK":
                     Subtask tempSubtask = new Subtask(tempStr[2], tempStr[4]);
                     tempSubtask.setId(Integer.parseInt(tempStr[0]));
                     tempSubtask.setStatus(StatusTask.valueOf(tempStr[3]));
-                    tempSubtask.setEpicId(Integer.parseInt(tempStr[7]));
-                    tempSubtask.setStartTime(LocalDateTime.parse(tempStr[5]));
-                    tempSubtask.setEndTime(LocalDateTime.parse(tempStr[6]));
-                    super.storageEpic.get(Integer.parseInt(tempStr[7])).setSubtasksId(Integer.parseInt(tempStr[0]));
+                    tempSubtask.setEpicId(Integer.parseInt(tempStr[8]));
+                    tempSubtask.setStartTime( (tempStr[5].equals("TimeNotSelected")) ? null: LocalDateTime.parse(tempStr[5]) );
+                    tempSubtask.setDuration(Long.parseLong(tempStr[6]));
+                    super.storageEpic.get(Integer.parseInt(tempStr[8])).setSubtasksId(Integer.parseInt(tempStr[0]));
                     return tempSubtask;
             }
         }
@@ -166,7 +196,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void removeAllTask() { //удаление всех задач
         super.removeAllTask();
         save();
-
     }
 
     @Override
@@ -271,11 +300,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         TaskManager fileTaskManager = Managers.getDefault(saveFilePath);
 
         Epic epic3 = new Epic("name", "description");
-        epic3.setStartTime(LocalDateTime.of(2000, FEBRUARY, 10, 10, 10));
-        epic3.setDuration(30);
+       // epic3.setStartTime(LocalDateTime.of(2000, FEBRUARY, 10, 10, 10));
+       // epic3.setDuration(30);
         fileTaskManager.createEpic(epic3);
         Task task3 = new Task("name", "description");
-        task3.setStartTime(LocalDateTime.of(2222, FEBRUARY, 15, 10, 10));
+        task3.setStartTime(LocalDateTime.of(2020, FEBRUARY, 15, 10, 0));
         task3.setDuration(50);
         fileTaskManager.createTask(task3);
         fileTaskManager.getEpicById(1);
@@ -287,6 +316,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileTaskManager.createSubtask(subtask3_1);
         fileTaskManager.getSubtaskById(3);
 
+        Subtask subtask3_2 = new Subtask("name", "description");
+        subtask3_2.setStartTime(LocalDateTime.of(1970, FEBRUARY, 21, 10, 10));
+        subtask3_2.setEpicId(1);
+        subtask3_2.setDuration(20);
+        fileTaskManager.createSubtask(subtask3_2);
+
+
+
         System.out.println(fileTaskManager.getAllEpic());
         System.out.println(fileTaskManager.getAllSubtask());
         System.out.println(fileTaskManager.getAllTask());
@@ -296,7 +333,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileTaskManager.getTaskById(2).setStatus(StatusTask.IN_PROGRESS);
         System.out.println("\nИзменим статус задачи");
         System.out.println(fileTaskManager.getTaskById(2));
-
+        System.out.println("\nПолучение GetPrTask:");
+        System.out.println(fileTaskManager.getPrioritizedTasks());
 
         File loadFilePath = new File(".\\Resources\\saveConfig.csv");
 
@@ -308,8 +346,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println(fileTaskManager1.getAllTask());
         System.out.println("====================История====================");
         System.out.println(fileTaskManager1.getHistory());
-        System.out.println("\n");
+        System.out.println("\nПолучение GetPrTask:");
         System.out.println(fileTaskManager1.getPrioritizedTasks());
+        System.out.println("\n!!!Эпик находится в конце из - за того, что изначально время для него не было задано, \n" +
+                            "если время для эпика будет задано, то его расположение в списке задач изменится!!!");
     }
 
 }

@@ -26,7 +26,9 @@ public class Subtask extends Task {
                 "name = " + name + ", " +
                 "description = " + description + ", " +
                 "statusTask = " + status + ", " +
-                "startTime = " + startTime;
+                "startTime = " + startTime + ", " +
+                "duration = " + duration + ", " +
+                "endTime = " + getEndTime();
     }
 
 }

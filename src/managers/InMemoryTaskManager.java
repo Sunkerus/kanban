@@ -1,5 +1,7 @@
 package managers;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import errors.ManagerSaveException;
@@ -77,6 +79,9 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Epic> getAllEpic() {
 
         Collection<Epic> values = storageEpic.values();
+        for(Epic iteratorEpic: values){
+            updateEpicTime(iteratorEpic);
+        }
         return new ArrayList<>(values);
     }
 
@@ -141,6 +146,7 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic iterator : storageEpic.values()) {
             iterator.setStatus(StatusTask.NEW);
             iterator.clearAllId();
+            updateEpicTime(iterator);
         }
         storageSubtask.clear();
     }
@@ -163,6 +169,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setId(generateId);
         storageEpic.get(subtask.getEpicId()).addId(subtask.getId());
         updateEpicStatus(storageEpic.get(subtask.getEpicId()));
+        updateEpicTime(storageEpic.get(subtask.getEpicId()));
     }
 
     @Override
@@ -170,15 +177,17 @@ public class InMemoryTaskManager implements TaskManager {
         checkTheTaskCompletionTime(subtask);
         storageSubtask.put(subtask.getId(), subtask);
         updateEpicStatus(storageEpic.get(subtask.getEpicId()));
+        updateEpicTime(storageEpic.get(subtask.getEpicId()));
     }
 
     @Override
     public void deleteSubtaskById(Integer id) throws ManagerSaveException {
         try {
             Integer epicId = storageSubtask.get(id).getEpicId();
-
+            prTask.remove(storageSubtask.get(id));
             storageEpic.get(epicId).deleteId(id);
             storageSubtask.remove(id);
+            updateEpicTime(storageEpic.get(epicId));
             updateEpicStatus(storageEpic.get(epicId));
             historyManager.remove(id);
         } catch (NullPointerException e) {
@@ -219,6 +228,26 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    protected void updateEpicTime(Epic epic) {
+
+        LocalDateTime startTime = storageSubtask.get(epic.getSubtasksId().get(0)).getStartTime();
+        LocalDateTime endTime = storageSubtask.get(epic.getSubtasksId().get(0)).getEndTime();
+        for (Integer subtaskId : epic.getSubtasksId()) {
+            if (storageSubtask.get(subtaskId).getStartTime() != null && storageSubtask.get(subtaskId).getStartTime() != null) {
+                if (storageSubtask.get(subtaskId).getStartTime().isBefore(startTime)) {
+                    startTime = storageSubtask.get(subtaskId).getStartTime();
+                }
+                if (storageSubtask.get(subtaskId).getEndTime().isAfter(endTime)) {
+                    endTime = storageSubtask.get(subtaskId).getEndTime();
+                }
+            }
+        }
+        epic.setStartTime(startTime);
+        epic.setEndTime(endTime);
+
+        if (startTime != null && endTime != null) {epic.setDuration(Duration.between(startTime,endTime).toMinutes());}
+    }
+
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
@@ -230,22 +259,43 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-    protected void checkTheTaskCompletionTime(Task task) {
+    public void checkTheTaskCompletionTime(Task task) {
+        boolean isStartTimeIdent = false;
+        boolean notCorrectTimeEnd = false;
+        boolean notCorrectTimeStart = false;
         if (task.getStartTime() == null || prTask.size() == 0) {
             prTask.add(task);
         } else {
-            for (Task iterTask : prTask) {
-                boolean startTimeIdent = iterTask.getStartTime()
-                        .equals(task.getStartTime());
-                boolean notCorrectTimeEnd = task.getEndTime().isAfter(iterTask.getStartTime()) && task.getEndTime().isBefore(iterTask.getEndTime());
-                boolean notCorrectTimeStart = task.getStartTime().isAfter(iterTask.getStartTime()) && task.getStartTime().isBefore(iterTask.getEndTime());
-                if (startTimeIdent || notCorrectTimeEnd || notCorrectTimeStart) {
-                    throw new RuntimeException("Задача на это время уже создана.");
+
+            for (Task t : prTask) {
+                if (t.getStartTime() != null && task.getStartTime() != null) {
+
+                /*
+                   if (t.getClass().getSimpleName().equals("Epic") && task.getClass().getSimpleName().equals("Subtask")) {
+                        Epic tempEpic = (Epic) t;
+
+                        if (getListSubtaskOfEpic(tempEpic.getId()).contains((Subtask) task)) {
+                            isStartTimeIdent = false;
+                        }
+                    } else if (t.getClass().getSimpleName().equals("Subtask") && task.getClass().getSimpleName().equals("Epic")) {
+                        Epic tempEpic = (Epic) task;
+
+                        if (getListSubtaskOfEpic(tempEpic.getId()).contains((Subtask) t)) {
+                            isStartTimeIdent = false;
+                        }
+                    }else {
+*/
+                    isStartTimeIdent = t.getStartTime().equals(task.getStartTime());
+                    notCorrectTimeEnd = task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime());
+                    notCorrectTimeStart = task.getStartTime().isAfter(t.getStartTime()) && task.getStartTime().isBefore(t.getEndTime());
+            }
+                    if (isStartTimeIdent || notCorrectTimeEnd || notCorrectTimeStart) {
+                        throw new RuntimeException("Задача на это время уже существует");
+                    }
                 }
             }
+
             prTask.add(task);
+
         }
-    }
-
-
 }

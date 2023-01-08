@@ -10,14 +10,15 @@ public class Task {
     protected Integer id;
     protected StatusTask status;
 
-    protected LocalDateTime startTime = LocalDateTime.now();
-    protected LocalDateTime endTime = LocalDateTime.now();
-    protected long duration = 0;
+    protected LocalDateTime startTime;
+
+    protected long duration;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.status = StatusTask.NEW;
+        this.duration = 0;
     }
 
     public void setStatus(StatusTask status) {
@@ -63,6 +64,7 @@ public class Task {
                 "description = " + description + ", " +
                 "statusTask = " + status + ", " +
                 "startTime = " + startTime + ", " +
+                "duration = " + duration + ", " +
                 "endTime = " + getEndTime();
     }
 
@@ -70,9 +72,6 @@ public class Task {
         this.startTime = startTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -81,12 +80,15 @@ public class Task {
         this.duration = duration;
     }
 
+
+    public long getDuration() {
+        return duration;
+    }
     public LocalDateTime getEndTime() {
-        try {
-            endTime = LocalDateTime.from(startTime).plusMinutes(duration);
-            return endTime;
-        } catch (NullPointerException e) {
-            throw new RuntimeException("Время начала выполнения задачи или время выполнения не указаны");
+        if (startTime != null) {
+            return LocalDateTime.from(startTime).plusMinutes(duration);
+        }else {
+            return null;
         }
     }
 
