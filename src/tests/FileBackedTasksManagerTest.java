@@ -5,10 +5,9 @@ import managers.FileBackedTasksManager;
 import managers.Managers;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
-import tasks.Task;
 
 import java.io.File;
-import java.io.IOException;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,8 +57,4 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         assertEquals(baseEpic.getSubtasksId(), savedEpic1.getSubtasksId(), "Загруженные эпики различны, у них есть подзадачи");
 
     }
-
-    //add test methods for sort dy time
-
-
 }
