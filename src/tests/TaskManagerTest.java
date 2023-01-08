@@ -1,6 +1,7 @@
 package tests;
 
 import errors.ManagerSaveException;
+import managers.FileBackedTasksManager;
 import managers.TaskManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,11 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.time.Month.FEBRUARY;
+import static java.time.Month.JANUARY;
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
@@ -348,4 +352,108 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertTrue(isHere, "История не возвращается");
 
     }
+
+    @Test
+    public void shouldEpicTimeIsCalculatedCorrectly() {
+        Epic epic1 = new Epic("epic1", "description");
+        manager.createEpic(epic1);
+        final int epicId = epic1.getId();
+        final Epic baseEpic = manager.getEpicById(epicId);
+
+        Subtask subtask1 = new Subtask("name", "description");
+        subtask1.setStartTime(LocalDateTime.of(1970, FEBRUARY, 20, 10, 10));
+        subtask1.setEpicId(epicId);
+        subtask1.setDuration(10);
+        manager.createSubtask(subtask1);
+
+        Subtask subtask2 = new Subtask("name", "description");
+        subtask2.setStartTime(LocalDateTime.of(1970, FEBRUARY, 21, 10, 10));
+        subtask2.setEpicId(epicId);
+        subtask2.setDuration(20);
+        manager.createSubtask(subtask2);
+
+        final long duration = baseEpic.getDuration();
+        final long calculatedDuration = 1460;
+
+        assertEquals(duration,calculatedDuration, "Время для эпика, исходя из времени подзадач считается не верно");
+
+
+        Epic epic2 = new Epic("epic1", "description");
+        manager.createEpic(epic2);
+        final int epicId2 = epic2.getId();
+        final Epic baseEpic2 = manager.getEpicById(epicId2);
+
+        final long duraton2 = baseEpic2.getDuration();
+        final long calculatedDuration2 = 0;
+
+        assertEquals(duraton2,calculatedDuration2,"Продолжительность выполнения задания для эпика, при отсуствующих подзадачах не равно нулю");
+
+        Epic epic3 = new Epic("epic1", "description");
+        manager.createEpic(epic3);
+        final int epicId3 = epic3.getId();
+        final Epic baseEpic3 = manager.getEpicById(epicId3);
+
+        Subtask subtask3_1 = new Subtask("name", "description");
+        subtask3_1.setEpicId(epicId3);
+        manager.createSubtask(subtask3_1);
+
+        Subtask subtask3_2 = new Subtask("name", "description");
+        subtask3_2.setEpicId(epicId3);
+        manager.createSubtask(subtask3_2);
+
+        final long duration3 = baseEpic3.getDuration();
+        final long calculatedDuration3 = 0;
+
+        assertEquals(duration3,calculatedDuration3, "Время для эпика, при незаданном времени подзадач считается неверно");
+    }
+
+
+    @Test
+    public void shouldTheTaskCompletionTimeCheckingCorrectly() {
+        Epic epic1 = new Epic("epic1", "description");
+        manager.createEpic(epic1);
+        final int epicId = epic1.getId();
+
+        Subtask subtask1 = new Subtask("name", "description");
+        subtask1.setStartTime(LocalDateTime.of(1970, FEBRUARY, 20, 10, 10));
+        subtask1.setEpicId(epicId);
+        subtask1.setDuration(10);
+        manager.createSubtask(subtask1);
+
+        Subtask subtask2 = new Subtask("name", "description");
+        subtask2.setStartTime(LocalDateTime.of(1970, FEBRUARY, 20, 10, 10));
+        subtask2.setEpicId(epicId);
+        subtask2.setDuration(20);
+
+
+        final RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> manager.createSubtask(subtask2)
+        );
+
+        assertEquals("Задача на это время уже существует", exception.getMessage());
+
+        Task task1 = new Task("name", "description");
+        task1.setStartTime(LocalDateTime.of(2000, FEBRUARY, 1, 1, 0));
+        task1.setDuration(10);
+        manager.createTask(task1);
+
+        Task task2 = new Task("name", "description");
+        task2.setStartTime(LocalDateTime.of(2000, FEBRUARY, 1, 1, 9));
+        task2.setDuration(10);
+
+
+
+        final RuntimeException exception2 = assertThrows(
+                RuntimeException.class,
+                () -> manager.createTask(task2)
+        );
+
+        assertEquals("Задача на это время уже существует", exception2.getMessage());
+
+    }
+
+
+
+
 }

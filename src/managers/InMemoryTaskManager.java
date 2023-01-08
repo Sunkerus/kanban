@@ -266,6 +266,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     public void checkTheTaskCompletionTime(Task task) {
+
         boolean isStartTimeIdent = false;
         boolean notCorrectTimeEnd = false;
         boolean notCorrectTimeStart = false;
@@ -273,11 +274,11 @@ public class InMemoryTaskManager implements TaskManager {
             prTask.add(task);
         } else {
 
-            for (Task t : prTask) {
-                if (t.getStartTime() != null && task.getStartTime() != null) {
-                    isStartTimeIdent = t.getStartTime().equals(task.getStartTime());
-                    notCorrectTimeEnd = task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime());
-                    notCorrectTimeStart = task.getStartTime().isAfter(t.getStartTime()) && task.getStartTime().isBefore(t.getEndTime());
+            for (Task iteratorTask : prTask) {
+                if (iteratorTask.getStartTime() != null && task.getStartTime() != null) {
+                    isStartTimeIdent = iteratorTask.getStartTime().equals(task.getStartTime());
+                    notCorrectTimeEnd = task.getEndTime().isAfter(iteratorTask.getStartTime()) && task.getEndTime().isBefore(iteratorTask.getEndTime());
+                    notCorrectTimeStart = task.getStartTime().isAfter(iteratorTask.getStartTime()) && task.getStartTime().isBefore(iteratorTask.getEndTime());
                 }
                 if (isStartTimeIdent || notCorrectTimeEnd || notCorrectTimeStart) {
                     throw new RuntimeException("Задача на это время уже существует");
