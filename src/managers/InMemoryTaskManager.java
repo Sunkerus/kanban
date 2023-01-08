@@ -229,23 +229,29 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     protected void updateEpicTime(Epic epic) {
-
-        LocalDateTime startTime = storageSubtask.get(epic.getSubtasksId().get(0)).getStartTime();
-        LocalDateTime endTime = storageSubtask.get(epic.getSubtasksId().get(0)).getEndTime();
-        for (Integer subtaskId : epic.getSubtasksId()) {
-            if (storageSubtask.get(subtaskId).getStartTime() != null && storageSubtask.get(subtaskId).getStartTime() != null) {
-                if (storageSubtask.get(subtaskId).getStartTime().isBefore(startTime)) {
-                    startTime = storageSubtask.get(subtaskId).getStartTime();
-                }
-                if (storageSubtask.get(subtaskId).getEndTime().isAfter(endTime)) {
-                    endTime = storageSubtask.get(subtaskId).getEndTime();
+        if (!epic.getSubtasksId().isEmpty()) {
+            LocalDateTime startTime = storageSubtask.get(epic.getSubtasksId().get(0)).getStartTime();
+            LocalDateTime endTime = storageSubtask.get(epic.getSubtasksId().get(0)).getEndTime();
+            for (Integer subtaskId : epic.getSubtasksId()) {
+                if (storageSubtask.get(subtaskId).getStartTime() != null && storageSubtask.get(subtaskId).getStartTime() != null) {
+                    if (storageSubtask.get(subtaskId).getStartTime().isBefore(startTime)) {
+                        startTime = storageSubtask.get(subtaskId).getStartTime();
+                    }
+                    if (storageSubtask.get(subtaskId).getEndTime().isAfter(endTime)) {
+                        endTime = storageSubtask.get(subtaskId).getEndTime();
+                    }
                 }
             }
+            epic.setStartTime(startTime);
+            epic.setEndTime(endTime);
+            if (startTime != null && endTime != null) {
+                epic.setDuration(Duration.between(startTime, endTime).toMinutes());
+            }
+        }else {
+            epic.setStartTime(null);
+            epic.setEndTime(null);
+            epic.setDuration(0);
         }
-        epic.setStartTime(startTime);
-        epic.setEndTime(endTime);
-
-        if (startTime != null && endTime != null) {epic.setDuration(Duration.between(startTime,endTime).toMinutes());}
     }
 
     @Override
@@ -269,22 +275,6 @@ public class InMemoryTaskManager implements TaskManager {
 
             for (Task t : prTask) {
                 if (t.getStartTime() != null && task.getStartTime() != null) {
-
-                /*
-                   if (t.getClass().getSimpleName().equals("Epic") && task.getClass().getSimpleName().equals("Subtask")) {
-                        Epic tempEpic = (Epic) t;
-
-                        if (getListSubtaskOfEpic(tempEpic.getId()).contains((Subtask) task)) {
-                            isStartTimeIdent = false;
-                        }
-                    } else if (t.getClass().getSimpleName().equals("Subtask") && task.getClass().getSimpleName().equals("Epic")) {
-                        Epic tempEpic = (Epic) task;
-
-                        if (getListSubtaskOfEpic(tempEpic.getId()).contains((Subtask) t)) {
-                            isStartTimeIdent = false;
-                        }
-                    }else {
-*/
                     isStartTimeIdent = t.getStartTime().equals(task.getStartTime());
                     notCorrectTimeEnd = task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime());
                     notCorrectTimeStart = task.getStartTime().isAfter(t.getStartTime()) && task.getStartTime().isBefore(t.getEndTime());
