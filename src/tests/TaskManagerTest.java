@@ -1,7 +1,5 @@
 package tests;
 
-import errors.ManagerSaveException;
-import managers.FileBackedTasksManager;
 import managers.TaskManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -10,12 +8,11 @@ import tasks.StatusTask;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.time.Month.FEBRUARY;
-import static java.time.Month.JANUARY;
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
@@ -452,7 +449,35 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals("Задача на это время уже существует", exception2.getMessage());
     }
 
+    @Test
+    public void shouldPrTaskWorkCorrectly() {
+        Task task1 = new Task("name", "description");
+        Task task2 = new Task ("name", "description");
+        Task task3 = new Task("name", "description");
+        task1.setStartTime(LocalDateTime.of(2000, FEBRUARY, 10, 10, 10));
+        task1.setDuration(10);
 
+        task2.setStartTime(LocalDateTime.of(2000, FEBRUARY, 12,10 , 10));
+        task2.setDuration(10);
+
+        manager.createTask(task1);
+        manager.createTask(task2);
+        manager.createTask(task3);
+
+        List<Task> prTask = new ArrayList<>(manager.getPrioritizedTasks());
+
+        final Task firstPrTask = prTask.get(0);
+
+        assertEquals(task1,firstPrTask,"Метод неверно выстраивает приоритет");
+
+        final Task secondPrTask = prTask.get(1);
+
+        assertEquals(task2,secondPrTask,"Метод неверно выстраивает приоритет");
+
+        final Task thirdPrTask = prTask.get(2);
+
+        assertEquals(task3,thirdPrTask,"Метод неверно выстраивает приоритет");
+    }
 
 
 }
