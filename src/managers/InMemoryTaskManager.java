@@ -4,8 +4,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import errors.ManagerSaveException;
 import tasks.*;
+import errors.ManagerSaveException;
 import comparators.TimeTaskComparator;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -79,7 +79,7 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Epic> getAllEpic() {
 
         Collection<Epic> values = storageEpic.values();
-        for(Epic iteratorEpic: values){
+        for (Epic iteratorEpic : values) {
             updateEpicTime(iteratorEpic);
         }
         return new ArrayList<>(values);
@@ -247,7 +247,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (startTime != null && endTime != null) {
                 epic.setDuration(Duration.between(startTime, endTime).toMinutes());
             }
-        }else {
+        } else {
             epic.setStartTime(null);
             epic.setEndTime(null);
             epic.setDuration(0);
@@ -278,14 +278,14 @@ public class InMemoryTaskManager implements TaskManager {
                     isStartTimeIdent = t.getStartTime().equals(task.getStartTime());
                     notCorrectTimeEnd = task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime());
                     notCorrectTimeStart = task.getStartTime().isAfter(t.getStartTime()) && task.getStartTime().isBefore(t.getEndTime());
-            }
-                    if (isStartTimeIdent || notCorrectTimeEnd || notCorrectTimeStart) {
-                        throw new RuntimeException("Задача на это время уже существует");
-                    }
+                }
+                if (isStartTimeIdent || notCorrectTimeEnd || notCorrectTimeStart) {
+                    throw new RuntimeException("Задача на это время уже существует");
                 }
             }
-
-            prTask.add(task);
-
         }
+
+        prTask.add(task);
+
+    }
 }

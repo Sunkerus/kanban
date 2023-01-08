@@ -4,7 +4,6 @@ import tasks.*;
 
 import java.util.*;
 
-
 public class InMemoryHistoryManager implements HistoryManager {
 
     //CustomLinkedList

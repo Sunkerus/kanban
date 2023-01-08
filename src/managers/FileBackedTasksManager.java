@@ -102,39 +102,39 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         switch (className) {
             case "Task":
                 return String.join(",",
-                                    Integer.toString(task.getId()),
-                                    TypeTask.TASK.name(),
-                                    task.getName(),
-                                    task.getStatus().name(),
-                                    task.getDescription(),
-                                    (task.getStartTime() != null) ? task.getStartTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
-                                    Long.toString(task.getDuration()),
-                                    (task.getEndTime() != null) ? task.getEndTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
-                                    "");
+                        Integer.toString(task.getId()),
+                        TypeTask.TASK.name(),
+                        task.getName(),
+                        task.getStatus().name(),
+                        task.getDescription(),
+                        (task.getStartTime() != null) ? task.getStartTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                        Long.toString(task.getDuration()),
+                        (task.getEndTime() != null) ? task.getEndTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                        "");
             case "Epic":
                 Epic tempEpic = (Epic) task;
                 return String.join(",",
-                                    Integer.toString(tempEpic.getId()),
-                                    TypeTask.EPIC.name(),
-                                    tempEpic.getName(),
-                                    tempEpic.getStatus().name(),
-                                    tempEpic.getDescription(),
-                                    (tempEpic.getStartTime() != null && tempEpic.getSubtasksId().isEmpty()) ? tempEpic.getStartTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
-                                    Long.toString(tempEpic.getDuration()),
-                                    (tempEpic.getEndTime() != null && tempEpic.getSubtasksId().isEmpty()) ? tempEpic.getEndTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
-                                    "");
-                case "Subtask":
+                        Integer.toString(tempEpic.getId()),
+                        TypeTask.EPIC.name(),
+                        tempEpic.getName(),
+                        tempEpic.getStatus().name(),
+                        tempEpic.getDescription(),
+                        (tempEpic.getStartTime() != null && tempEpic.getSubtasksId().isEmpty()) ? tempEpic.getStartTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                        Long.toString(tempEpic.getDuration()),
+                        (tempEpic.getEndTime() != null && tempEpic.getSubtasksId().isEmpty()) ? tempEpic.getEndTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                        "");
+            case "Subtask":
                 Subtask tempSubtask = (Subtask) task;
                 return String.join(",",
-                                    Integer.toString(tempSubtask.getId()),
-                                    TypeTask.SUBTASK.name(),
-                                    tempSubtask.getName(),
-                                    tempSubtask.getStatus().name(),
-                                    tempSubtask.getDescription(),
-                                    (tempSubtask.getStartTime() != null) ? tempSubtask.getStartTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
-                                    Long.toString(task.getDuration()),
-                                    (tempSubtask.getEndTime() != null) ? tempSubtask.getEndTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
-                                    Integer.toString(tempSubtask.getEpicId()));
+                        Integer.toString(tempSubtask.getId()),
+                        TypeTask.SUBTASK.name(),
+                        tempSubtask.getName(),
+                        tempSubtask.getStatus().name(),
+                        tempSubtask.getDescription(),
+                        (tempSubtask.getStartTime() != null) ? tempSubtask.getStartTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                        Long.toString(task.getDuration()),
+                        (tempSubtask.getEndTime() != null) ? tempSubtask.getEndTime().format(ISO_LOCAL_DATE_TIME) : "TimeNotSelected",
+                        Integer.toString(tempSubtask.getEpicId()));
             default:
                 throw new ManagerSaveException("Ошибка преобразование в строку");
         }
@@ -157,23 +157,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     Task tempTask = new Task(tempStr[2], tempStr[4]);
                     tempTask.setId((Integer.parseInt(tempStr[0])));
                     tempTask.setStatus(StatusTask.valueOf(tempStr[3]));
-                    tempTask.setStartTime( (tempStr[5].equals("TimeNotSelected")) ? null: LocalDateTime.parse(tempStr[5]) );
+                    tempTask.setStartTime((tempStr[5].equals("TimeNotSelected")) ? null : LocalDateTime.parse(tempStr[5]));
                     tempTask.setDuration(Long.parseLong(tempStr[6]));
                     return tempTask;
                 case "EPIC":
                     Epic tempEpic = new Epic(tempStr[2], tempStr[4]);
                     tempEpic.setId((Integer.parseInt(tempStr[0])));
                     tempEpic.setStatus(StatusTask.valueOf(tempStr[3]));
-                    tempEpic.setStartTime( (tempStr[5].equals("TimeNotSelected")) ? null: LocalDateTime.parse(tempStr[5]) );
+                    tempEpic.setStartTime((tempStr[5].equals("TimeNotSelected")) ? null : LocalDateTime.parse(tempStr[5]));
                     tempEpic.setDuration(Long.parseLong(tempStr[6]));
-                    tempEpic.setEndTime( (tempStr[5].equals("TimeNotSelected")) ? null: LocalDateTime.parse(tempStr[5]) );
+                    tempEpic.setEndTime((tempStr[5].equals("TimeNotSelected")) ? null : LocalDateTime.parse(tempStr[5]));
                     return tempEpic;
                 case "SUBTASK":
                     Subtask tempSubtask = new Subtask(tempStr[2], tempStr[4]);
                     tempSubtask.setId(Integer.parseInt(tempStr[0]));
                     tempSubtask.setStatus(StatusTask.valueOf(tempStr[3]));
                     tempSubtask.setEpicId(Integer.parseInt(tempStr[8]));
-                    tempSubtask.setStartTime( (tempStr[5].equals("TimeNotSelected")) ? null: LocalDateTime.parse(tempStr[5]) );
+                    tempSubtask.setStartTime((tempStr[5].equals("TimeNotSelected")) ? null : LocalDateTime.parse(tempStr[5]));
                     tempSubtask.setDuration(Long.parseLong(tempStr[6]));
                     super.storageEpic.get(Integer.parseInt(tempStr[8])).setSubtasksId(Integer.parseInt(tempStr[0]));
                     return tempSubtask;
@@ -300,8 +300,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         TaskManager fileTaskManager = Managers.getDefault(saveFilePath);
 
         Epic epic3 = new Epic("name", "description");
-       // epic3.setStartTime(LocalDateTime.of(2000, FEBRUARY, 10, 10, 10));
-       // epic3.setDuration(30);
+
         fileTaskManager.createEpic(epic3);
         Task task3 = new Task("name", "description");
         task3.setStartTime(LocalDateTime.of(2020, FEBRUARY, 15, 10, 0));
@@ -321,7 +320,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         subtask3_2.setEpicId(1);
         subtask3_2.setDuration(20);
         fileTaskManager.createSubtask(subtask3_2);
-
 
 
         System.out.println(fileTaskManager.getAllEpic());
@@ -349,7 +347,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println("\nПолучение GetPrTask:");
         System.out.println(fileTaskManager1.getPrioritizedTasks());
         System.out.println("\n!!!Эпик находится в конце из - за того, что изначально время для него не было задано, \n" +
-                            "если время для эпика будет задано, то его расположение в списке задач изменится!!!");
+                "если время для эпика будет задано, то его расположение в списке задач изменится!!!");
     }
 
 }

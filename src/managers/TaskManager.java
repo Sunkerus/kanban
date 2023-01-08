@@ -10,8 +10,9 @@ public interface TaskManager {
 
     int generateId();
 
-    List<Task> getAllTask();
+    //methods for tasks
 
+    List<Task> getAllTask();
 
     void removeAllTask();
 
@@ -24,7 +25,7 @@ public interface TaskManager {
     void deleteTaskById(int id);
 
 
-    //методы для эпиков
+    //methods for epics
 
     List<Epic> getAllEpic();
 
@@ -39,7 +40,7 @@ public interface TaskManager {
 
     void deleteEpicById(int id);
 
-    //методя для подзадач
+    //methods for subtasks
 
     List<Subtask> getAllSubtask();
 

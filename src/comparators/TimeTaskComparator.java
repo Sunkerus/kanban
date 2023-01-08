@@ -17,7 +17,7 @@ public class TimeTaskComparator implements Comparator<Task> {
         if (o2.getStartTime() == null) {
             return -1;
         }
-             return o1.getStartTime().compareTo(o2.getStartTime());
+        return o1.getStartTime().compareTo(o2.getStartTime());
     }
 
 

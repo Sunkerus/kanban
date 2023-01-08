@@ -1,10 +1,8 @@
 package tasks;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import managers.InMemoryTaskManager;
 public class Epic extends Task {
 
     private final ArrayList<Integer> subtasksId = new ArrayList<>();
@@ -34,6 +32,7 @@ public class Epic extends Task {
     }
 
     private LocalDateTime endTime;
+
     @Override
     public LocalDateTime getEndTime() {
         return endTime;

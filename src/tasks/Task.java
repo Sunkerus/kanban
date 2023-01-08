@@ -84,10 +84,11 @@ public class Task {
     public long getDuration() {
         return duration;
     }
+
     public LocalDateTime getEndTime() {
         if (startTime != null) {
             return LocalDateTime.from(startTime).plusMinutes(duration);
-        }else {
+        } else {
             return null;
         }
     }
