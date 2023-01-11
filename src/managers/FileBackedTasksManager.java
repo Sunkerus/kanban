@@ -63,10 +63,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                             break;
                         case "Epic":
                             tempFileManager.storageEpic.put(tempTask.getId(), (Epic) tempTask);
-                            tempFileManager.checkTheTaskCompletionTime(tempTask);
                             break;
                         case "Subtask":
-                            tempFileManager.storageSubtask.put(tempTask.getId(), (Subtask) tempTask);
+                            Subtask tempSubtask = (Subtask) tempTask;
+                            tempFileManager.storageSubtask.put(tempSubtask.getId(), tempSubtask);
+                            if (tempFileManager.storageEpic.containsKey(tempSubtask.getEpicId())) {
+                                tempFileManager.updateEpicTime(tempFileManager.storageEpic.get(tempSubtask.getEpicId()));
+                            }
                             tempFileManager.checkTheTaskCompletionTime(tempTask);
                             break;
                         default:
@@ -321,6 +324,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         subtask3_2.setDuration(20);
         fileTaskManager.createSubtask(subtask3_2);
 
+        task3.setStartTime(LocalDateTime.of(2022, FEBRUARY, 21, 10, 10));
+        fileTaskManager.getAllTask();
+        fileTaskManager.updateTask(task3);
 
         System.out.println(fileTaskManager.getAllEpic());
         System.out.println(fileTaskManager.getAllSubtask());
@@ -331,6 +337,28 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileTaskManager.getTaskById(2).setStatus(StatusTask.IN_PROGRESS);
         System.out.println("\nИзменим статус задачи");
         System.out.println(fileTaskManager.getTaskById(2));
+
+        System.out.println("\nПолучение GetPrTask:");
+        System.out.println(fileTaskManager.getPrioritizedTasks());
+
+        Epic epic4 = new Epic("name", "description");
+
+        fileTaskManager.createEpic(epic4);
+        Subtask subtask4_1 = new Subtask("name", "description");
+        subtask4_1.setEpicId(5);
+        subtask4_1.setStartTime(LocalDateTime.of(2022, FEBRUARY, 1, 20, 0));
+        subtask4_1.setDuration(30);
+        fileTaskManager.createSubtask(subtask4_1);
+        System.out.println("\nСоздадим эпика с подзадачами id = 5");
+        System.out.println(fileTaskManager.getEpicById(5));
+
+        System.out.println("\nПолучение GetPrTask:");
+        System.out.println(fileTaskManager.getPrioritizedTasks());
+
+        fileTaskManager.getEpicById(5);
+        System.out.println("\nУдалим эпик id 1");
+        fileTaskManager.deleteEpicById(1);
+
         System.out.println("\nПолучение GetPrTask:");
         System.out.println(fileTaskManager.getPrioritizedTasks());
 
@@ -344,10 +372,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println(fileTaskManager1.getAllTask());
         System.out.println("====================История====================");
         System.out.println(fileTaskManager1.getHistory());
+
+        System.out.println("\nПолучим Epic id = 5:");
+        System.out.println(fileTaskManager1.getEpicById(5));
+
         System.out.println("\nПолучение GetPrTask:");
         System.out.println(fileTaskManager1.getPrioritizedTasks());
-        System.out.println("\n!!!Эпик находится в конце из - за того, что изначально время для него не было задано, \n" +
-                "если время для эпика будет задано, то его расположение в списке задач изменится!!!");
     }
 
 }

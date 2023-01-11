@@ -30,13 +30,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Task> getAllTask() {
-
         Collection<Task> values = storageTask.values();
         return new ArrayList<>(values);
     }
 
     @Override
     public void removeAllTask() {
+        prTask.removeIf(storageTask::containsValue);
         storageTask.clear();
 
     }
@@ -68,6 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskById(int id) {
+        prTask.remove(storageTask.get(id));
         storageTask.remove(id);
         historyManager.remove(id);
     }
@@ -77,18 +78,16 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Epic> getAllEpic() {
-
         Collection<Epic> values = storageEpic.values();
-        for (Epic iteratorEpic : values) {
-            updateEpicTime(iteratorEpic);
-        }
         return new ArrayList<>(values);
     }
 
     @Override
     public void removeAllEpic() {
-        storageEpic.clear();
+        prTask.removeIf(storageSubtask::containsValue);
         storageSubtask.clear();
+        storageEpic.clear();
+
     }
 
     @Override
@@ -104,14 +103,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createEpic(Epic epic) {
-        checkTheTaskCompletionTime(epic);
         storageEpic.put(generateId(), epic);
         epic.setId(generateId);
     }
 
     @Override
     public void updateEpic(Epic epic) {
-        checkTheTaskCompletionTime(epic);
         storageTask.put(epic.getId(), epic);
     }
 
@@ -121,6 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
             ArrayList<Integer> tempSubtaskIdArr = new ArrayList<>(storageEpic.get(id).getSubtasksId());
 
             for (Integer iterator : tempSubtaskIdArr) {
+                prTask.remove(storageSubtask.get(iterator));
                 deleteSubtaskById(iterator);
                 historyManager.remove(iterator);
             }
@@ -148,6 +146,7 @@ public class InMemoryTaskManager implements TaskManager {
             iterator.clearAllId();
             updateEpicTime(iterator);
         }
+        prTask.removeIf(storageSubtask::containsValue);
         storageSubtask.clear();
     }
 
@@ -275,7 +274,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
 
             for (Task iteratorTask : prTask) {
-                if (iteratorTask.getStartTime() != null && task.getStartTime() != null) {
+                if (iteratorTask.getStartTime() != null && !task.equals(iteratorTask)) {
                     isStartTimeIdent = iteratorTask.getStartTime().equals(task.getStartTime());
                     notCorrectTimeEnd = task.getEndTime().isAfter(iteratorTask.getStartTime()) && task.getEndTime().isBefore(iteratorTask.getEndTime());
                     notCorrectTimeStart = task.getStartTime().isAfter(iteratorTask.getStartTime()) && task.getStartTime().isBefore(iteratorTask.getEndTime());
